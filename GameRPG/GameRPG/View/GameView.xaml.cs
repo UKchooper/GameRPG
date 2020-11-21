@@ -132,20 +132,20 @@ namespace GameRPG.View
         {
             mapListIndex = mapLists.FindIndex(i => i.CoorY == CurrentNorthSouth && i.CoorX == CurrentEastWest);
 
-            imageDisplay.Source = new BitmapImage(new Uri($@"/Images/locations/{mapLists[mapListIndex].Description.ToLower()}.png", UriKind.Relative));
+            //imageDisplay.Source = new BitmapImage(new Uri($@"/Images/locations/{mapLists[mapListIndex].Description.ToLower()}.png", UriKind.Relative));
 
-            ok.Text = mapLists[mapListIndex].Title;
+            //ok.Text = mapLists[mapListIndex].Title;
 
-            tbkDescription.Text = mapLists[mapListIndex].Description;
+            //tbkDescription.Text = mapLists[mapListIndex].Description;
 
-            if (!string.IsNullOrWhiteSpace(mapLists[mapListIndex].DoSomething))
-            {
-                tbkEvent.Text = mapLists[mapListIndex].DoSomething;
-            }
-            else
-            {
-                tbkEvent.Text = "None";
-            }
+            //if (!string.IsNullOrWhiteSpace(mapLists[mapListIndex].LocationEvent))
+            //{
+            //    tbkEvent.Text = mapLists[mapListIndex].LocationEvent;
+            //}
+            //else
+            //{
+            //    tbkEvent.Text = "None";
+            //}
 
             DoingSomethingEvent();
         }
@@ -160,7 +160,7 @@ namespace GameRPG.View
 
         public void DoingSomethingEvent()
         {
-            switch (mapLists[mapListIndex].DoSomething)
+            switch (mapLists[mapListIndex].LocationEvent)
             {
                 case "Fight":
                     //MessageBox.Show("Fight begins!");
@@ -190,7 +190,7 @@ namespace GameRPG.View
 
             int currentMapListIndex = mapLists.FindIndex(i => i.CoorY == CurrentNorthSouth && i.CoorX == CurrentEastWest);
 
-            int itemIndex = mapLists.FindIndex(i => i.DoSomething.Contains(cbxHello.Text));
+            int itemIndex = mapLists.FindIndex(i => i.LocationEvent.Contains(cbxHello.Text));
 
             if (currentMapListIndex == itemIndex)
             {
@@ -226,9 +226,9 @@ namespace GameRPG.View
         {
             foreach (var eventos in mapLists)
             {
-                if (!string.IsNullOrEmpty(eventos.DoSomething))
+                if (!string.IsNullOrEmpty(eventos.LocationEvent))
                 {
-                    cbxHello.Items.Add(eventos.DoSomething);
+                    cbxHello.Items.Add(eventos.LocationEvent);
                 }
             }
         }

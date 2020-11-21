@@ -10,15 +10,15 @@ namespace GameRPG
         public int CoorX { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public string DoSomething { get; set; }
+        public string LocationEvent { get; set; }
 
-        public Map(int coorY, int coorX, string title, string description, string doSomething)
+        public Map(int coorY, int coorX, string title, string description, string locationEvent)
         {
             CoorY = coorY;
             CoorX = coorX;
             Title = title;
             Description = description;
-            DoSomething = doSomething;
+            LocationEvent = locationEvent;
         }
     }
 }
