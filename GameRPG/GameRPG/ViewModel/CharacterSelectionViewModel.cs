@@ -8,9 +8,9 @@ namespace GameRPG.ViewModel
 {
     public class CharacterSelectionViewModel : BindableBase
     {
-        private MainWindowViewModel main;
-
         const string characterFile = @"C:\Users\carl.hooper\Desktop\GameoStuffo\TextFiles\Characters.txt";
+
+        private MainWindowViewModel main;
 
         private string name;
         private string type;
@@ -178,7 +178,7 @@ namespace GameRPG.ViewModel
 
         private void PressConfirm()
         {
-            this.main.SwitchToFight();
+            this.main.SwitchToGameView();
         }
     }
 }

@@ -1,0 +1,146 @@
+﻿<UserControl x:Class="GameRPG.View.GameView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:GameRPG.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="120"/>
+        </Grid.RowDefinitions>
+
+        <!-- Left column-->
+
+        <Grid>
+
+            <Grid.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="FontSize" Value="15"/>
+                </Style>
+            </Grid.Resources>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Character Info:" Grid.ColumnSpan="2" FontSize="15" HorizontalAlignment="Left" Margin="10,0,0,0"/>
+
+            <StackPanel Grid.Row="1" Margin="10,5">
+                <TextBlock Text="Name:"/>
+                <TextBlock Text="Type"/>
+                <TextBlock Text="Level:"/>
+                <TextBlock Text="Experience:"/>
+                <TextBlock Text="Health:"/>
+                <TextBlock Text="Strength:"/>
+                <TextBlock Text="Intelligence:"/>
+                <TextBlock Text="Agility:"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" Grid.Row="1" Margin="10,5">
+                <TextBlock Text="{Binding Name}"/>
+                <TextBlock Text="Warrior"/>
+                <TextBlock Text="1"/>
+                <TextBlock Text="0"/>
+                <TextBlock Text="{Binding HP}"/>
+                <TextBlock Text="1"/>
+                <TextBlock Text="1"/>
+                <TextBlock Text="1"/>
+            </StackPanel>
+        </Grid>
+
+        <StackPanel Grid.Row="1" Margin="10,10">
+            <TextBlock Text="Health:" HorizontalAlignment="Center" />
+            <ProgressBar Margin="2" Minimum="0" Maximum="100" Value="{Binding HP}" Foreground="Red" />
+            <TextBlock Text="Experience:" HorizontalAlignment="Center"/>
+            <ProgressBar Margin="2" Minimum="0" Maximum="100" Value="75" Foreground="BlueViolet"/>
+        </StackPanel>
+
+        <ListView x:Name="lbxQuest" Margin="10,10" Grid.Column="0" Grid.Row="2" Background="AliceBlue" BorderThickness="0.5" Width="240" HorizontalAlignment="Left">
+            <ListView.Resources>
+                <Style TargetType="{x:Type GridViewColumnHeader}">
+                    <Setter Property="HorizontalContentAlignment" Value="Left" />
+                </Style>
+            </ListView.Resources>
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Quests:" Width="240" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <!-- Middle columns -->
+
+        <StackPanel Grid.Column="1" Grid.Row="0">
+            <Label Content="Information / Log:" FontSize="15" />
+            <TextBox Height="195" Margin="0,0,10,0"/>
+        </StackPanel>
+
+
+        <StackPanel Grid.Column="1" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="250" Margin="0,0,0,10">
+            <ComboBox x:Name="cbxHello" Margin="0,0,0,10" Height="25" SelectedIndex="0" />
+            <Button Height="30" Content="Event locator" Click="Button_Click"/>
+        </StackPanel>
+
+        <!-- Right column -->
+
+        <StackPanel Grid.Column="2">
+            <Label Content="Map:" FontSize="15" />
+            <Image x:Name="imageDisplay"  Grid.Row="0" Source="Images/locations/grass.png" Stretch="Fill" Margin="0,0,10,0"/>
+        </StackPanel>
+        <Grid Grid.Column="2" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Column="0">
+                <TextBlock Text="Area: " />
+                <TextBlock Text="Event: " />
+                <TextBlock Text="Type: " />
+            </StackPanel>
+
+            <StackPanel Grid.Column="1">
+                <TextBlock x:Name="ok" />
+                <TextBlock x:Name="tbkEvent" />
+                <TextBlock x:Name="tbkDescription" />
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Column="2" Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Button Height="30" x:Name="btnNorth" Margin="0,10,0,0" Grid.Column="1" Grid.Row="0" Content="North" Click="ButtonNorth_Click"/>
+            <Button Height="30" x:Name="btnEast" Margin="0,0,10,0" Grid.Column="2" Grid.Row="1" Content="East" Click="ButtonEast_Click"/>
+            <Button Height="30" x:Name="btnSouth" Margin="0,0,0,10" Grid.Column="1" Grid.Row="2" Content="South" Click="btnSouth_Click"/>
+            <Button Height="30" x:Name="btnWest" Margin="10,0,0,0" Grid.Column="0" Grid.Row="1" Content="West" Click="btnWest_Click"/>
+        </Grid>
+    </Grid>
+</UserControl>

@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NETCOREAPP;NETCOREAPP3_1
 C:\Users\carl.hooper\source\repos\NewNewGame\GameRPG\GameRPG\App.xaml
-5-71338593
+6-308938545
 
-15-1572107606
+18-367681011
 195-1743623653
-View\CharacterCreationView.xaml;View\CharacterSelectionView.xaml;View\FightView.xaml;View\MainWindow.xaml;View\StartScreenView.xaml;
+View\CharacterCreationView.xaml;View\CharacterSelectionView.xaml;View\FightView.xaml;View\GameView.xaml;View\MainWindow.xaml;View\StartScreenView.xaml;
 
 False
 

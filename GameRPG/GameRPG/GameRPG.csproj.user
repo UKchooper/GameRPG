@@ -16,12 +16,18 @@
     <Compile Update="View\FightView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="View\GameView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Update="View\CharacterCreationView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\CharacterSelectionView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\GameView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\StartScreenView.xaml">

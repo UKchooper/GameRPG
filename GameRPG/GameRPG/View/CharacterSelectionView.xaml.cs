@@ -16,7 +16,7 @@ namespace GameRPG.View
         }
         private void btnConfirm_Click(object sender, RoutedEventArgs e)
         {
-            Window.GetWindow(this).DataContext = new FightViewModel();
+            //Window.GetWindow(this).DataContext = new FightViewModel();
         }
     }
 }

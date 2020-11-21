@@ -21,6 +21,9 @@
         <DataTemplate DataType="{x:Type localViewModel:FightViewModel}">
             <localView:FightView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type localViewModel:GameViewModel}">
+            <localView:GameView />
+        </DataTemplate>
     </Window.Resources>
 
     <ContentControl Content="{Binding CurrentViewModel}"/>

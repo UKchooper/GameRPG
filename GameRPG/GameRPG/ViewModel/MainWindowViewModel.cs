@@ -8,16 +8,20 @@ namespace GameRPG.ViewModel
         private readonly CharacterSelectionViewModel characterSelectionViewModel;
         private readonly CharacterCreationViewModel characterCreationViewModel;
         private readonly FightViewModel fightViewModel;
-        
+        private readonly GameViewModel gameViewModel;
+
         private BindableBase currentViewModel;
 
         public MainWindowViewModel()
         {
             this.startScreenViewModel = new StartScreenViewModel(this);
             this.characterSelectionViewModel = new CharacterSelectionViewModel(this);
+            this.gameViewModel = new GameViewModel();
             this.characterCreationViewModel = new CharacterCreationViewModel();
             this.fightViewModel = new FightViewModel();
+
             this.CurrentViewModel = this.startScreenViewModel;
+            
         }
         public BindableBase CurrentViewModel
         {
@@ -36,9 +40,9 @@ namespace GameRPG.ViewModel
             this.CurrentViewModel = this.characterSelectionViewModel;
         }
 
-        public void SwitchToFight()
+        public void SwitchToGameView()
         {
-            this.CurrentViewModel = this.fightViewModel;
+            this.CurrentViewModel = this.gameViewModel;
         }
     }
 }

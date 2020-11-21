@@ -9,6 +9,9 @@
   <ItemGroup>
     <None Remove="Images\archer.png" />
     <None Remove="Images\knight.png" />
+    <None Remove="Images\locations\grass.png" />
+    <None Remove="Images\locations\ocean.png" />
+    <None Remove="Images\locations\sand.png" />
     <None Remove="Images\mage.png" />
     <None Remove="Images\warrior.png" />
   </ItemGroup>
@@ -24,6 +27,9 @@
     <Resource Include="Images\knight.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Images\locations\grass.png" />
+    <Resource Include="Images\locations\ocean.png" />
+    <Resource Include="Images\locations\sand.png" />
     <Resource Include="Images\mage.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
