@@ -1,0 +1,39 @@
+﻿using Prism.Mvvm;
+
+namespace GameRPG.ViewModel
+{
+    public class MainWindowViewModel : BindableBase
+    {
+        private readonly StartScreenViewModel startScreenViewModel;
+        private readonly CharacterSelectionViewModel characterSelectionViewModel;
+        private readonly CharacterCreationViewModel characterCreationViewModel;
+        private readonly FightViewModel fightViewModel;
+        
+        private BindableBase currentViewModel;
+
+        public MainWindowViewModel()
+        {
+            this.startScreenViewModel = new StartScreenViewModel(this);
+            this.characterSelectionViewModel = new CharacterSelectionViewModel();
+            this.characterCreationViewModel = new CharacterCreationViewModel();
+            this.fightViewModel = new FightViewModel();
+            this.CurrentViewModel = this.startScreenViewModel;
+        }
+        public BindableBase CurrentViewModel
+        {
+            get
+            {
+                return this.currentViewModel;
+            }
+            set
+            {
+                this.SetProperty(ref this.currentViewModel, value);
+            }
+        }
+
+        public void SwitchToCharacterSelection()
+        {
+            this.CurrentViewModel = this.characterSelectionViewModel;
+        }
+    }
+}

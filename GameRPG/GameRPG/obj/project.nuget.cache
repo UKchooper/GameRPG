@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "LzaNMyH+CBt69syXtxrfpNl0zqrTImyjxC1+gRFS8pDf39r3j/oXSKSMMnjsFfxRlm/Lb4J75TxN7nSLgUfNDQ==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\carl.hooper\\source\\repos\\NewNewGame\\GameRPG\\GameRPG\\GameRPG.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\carl.hooper\\.nuget\\packages\\microsoft.xaml.behaviors.wpf\\1.1.19\\microsoft.xaml.behaviors.wpf.1.1.19.nupkg.sha512",
+    "C:\\Users\\carl.hooper\\.nuget\\packages\\prism.core\\8.0.0.1909\\prism.core.8.0.0.1909.nupkg.sha512",
+    "C:\\Users\\carl.hooper\\.nuget\\packages\\prism.wpf\\8.0.0.1909\\prism.wpf.8.0.0.1909.nupkg.sha512",
+    "C:\\Users\\carl.hooper\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\3.1.2\\microsoft.aspnetcore.app.ref.3.1.2.nupkg.sha512"
+  ],
+  "logs": []
+}
