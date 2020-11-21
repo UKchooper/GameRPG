@@ -12,7 +12,7 @@ namespace GameRPG.View
         public CharacterSelectionView()
         {
             InitializeComponent();
-            DataContext = new CharacterSelectionViewModel();
+            //DataContext = new CharacterSelectionViewModel();
         }
         private void btnConfirm_Click(object sender, RoutedEventArgs e)
         {

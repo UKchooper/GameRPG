@@ -14,7 +14,7 @@ namespace GameRPG.ViewModel
         public MainWindowViewModel()
         {
             this.startScreenViewModel = new StartScreenViewModel(this);
-            this.characterSelectionViewModel = new CharacterSelectionViewModel();
+            this.characterSelectionViewModel = new CharacterSelectionViewModel(this);
             this.characterCreationViewModel = new CharacterCreationViewModel();
             this.fightViewModel = new FightViewModel();
             this.CurrentViewModel = this.startScreenViewModel;
@@ -34,6 +34,11 @@ namespace GameRPG.ViewModel
         public void SwitchToCharacterSelection()
         {
             this.CurrentViewModel = this.characterSelectionViewModel;
+        }
+
+        public void SwitchToFight()
+        {
+            this.CurrentViewModel = this.fightViewModel;
         }
     }
 }

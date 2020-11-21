@@ -45,7 +45,7 @@
                     <Image Grid.Row="0" Source="{Binding Image}" />
                     <TextBlock FontSize="16" FontWeight="Bold" Text="Description:" Grid.Row="1"/>
                     <TextBlock FontSize="16" TextWrapping="Wrap" Grid.Row="2" Width="380" HorizontalAlignment="Left" Text="{Binding Description}" />
-                    <Button Content="Confirm" Grid.Row="3" Width="100" HorizontalAlignment="Center" Margin="0,0,0,8" Click="btnConfirm_Click" />
+                    <Button Content="Confirm" Grid.Row="3" Width="100" HorizontalAlignment="Center" Margin="0,0,0,8" Command="{Binding ConfirmCommand}" />
                 </Grid>
             </Grid>
         </Border>

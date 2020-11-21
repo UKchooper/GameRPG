@@ -1,10 +1,15 @@
-﻿using Prism.Mvvm;
+﻿using Prism.Commands;
+using Prism.Mvvm;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
+
 namespace GameRPG.ViewModel
 {
     public class CharacterSelectionViewModel : BindableBase
     {
+        private MainWindowViewModel main;
+
         const string characterFile = @"C:\Users\carl.hooper\Desktop\GameoStuffo\TextFiles\Characters.txt";
 
         private string name;
@@ -20,8 +25,12 @@ namespace GameRPG.ViewModel
 
         private List<Character> characters;
         
-        public CharacterSelectionViewModel()
+        public CharacterSelectionViewModel(MainWindowViewModel main)
         {
+            this.main = main;
+
+            this.ConfirmCommand = new DelegateCommand(this.PressConfirm);
+
             TxtReader charReader = new TxtReader(characterFile);
             characters = charReader.ReadCharacters();
 
@@ -32,6 +41,8 @@ namespace GameRPG.ViewModel
                 CharacterNames.Add(character.Name);
             }
         }
+
+        public ICommand ConfirmCommand { get; set; }
 
         public string Name
         {
@@ -153,7 +164,7 @@ namespace GameRPG.ViewModel
             }
         }
 
-        private void UpdateCharacter()
+        public void UpdateCharacter()
         {
             Name = characters[SelectedCharacterIndex].Name;
             Type = characters[SelectedCharacterIndex].Type;
@@ -164,5 +175,10 @@ namespace GameRPG.ViewModel
             Defence = characters[SelectedCharacterIndex].Defence;
             Image = $"pack://application:,,,/{characters[selectedCharacterIndex].Image}";
          }
+
+        private void PressConfirm()
+        {
+            this.main.SwitchToFight();
+        }
     }
 }
