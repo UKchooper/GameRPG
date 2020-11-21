@@ -4,6 +4,8 @@ namespace GameRPG.ViewModel
 {
     public class MainWindowViewModel : BindableBase
     {
+        public int Index;
+
         private readonly StartScreenViewModel startScreenViewModel;
         private readonly CharacterSelectionViewModel characterSelectionViewModel;
         private readonly CharacterCreationViewModel characterCreationViewModel;
