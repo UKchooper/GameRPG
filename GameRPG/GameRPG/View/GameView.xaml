@@ -93,7 +93,7 @@
 
         <StackPanel Grid.Column="1" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="250" Margin="0,0,0,10">
             <ComboBox x:Name="cbxHello" Margin="0,0,0,10" Height="25" ItemsSource="{Binding EventNames}" SelectedIndex="{Binding SelectedEventIndex}" />
-            <Button Height="30" Content="Event locator" Click="Button_Click"/>
+            <Button Height="30" Content="Event locator" Click="Button_Click" Command="{Binding EventLocatorCommand}"/>
         </StackPanel>
 
         <!-- Right column -->

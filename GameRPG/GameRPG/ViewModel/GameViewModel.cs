@@ -3,6 +3,7 @@ using Prism.Mvvm;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 
 namespace GameRPG.ViewModel
@@ -36,6 +37,7 @@ namespace GameRPG.ViewModel
             this.EastButtonCommand = new DelegateCommand(this.EastButton);
             this.SouthButtonCommand = new DelegateCommand(this.SouthButton);
             this.WestButtonCommand = new DelegateCommand(this.WestButton);
+            this.EventLocatorCommand = new DelegateCommand(this.EventLocatorButton);
 
             AddLocations();
             MaxCoordinates();
@@ -52,7 +54,9 @@ namespace GameRPG.ViewModel
         public ICommand SouthButtonCommand { get; set; }
         
         public ICommand WestButtonCommand { get; set; }
-        
+
+        public ICommand EventLocatorCommand { get; set; }
+
         public string MapTitle
         {
             get
@@ -174,7 +178,6 @@ namespace GameRPG.ViewModel
             {
                 selectedEventIndex = value;
                 RaisePropertyChanged(nameof(SelectedEventIndex));
-                AddEvents();
             }
         }
 
@@ -196,15 +199,15 @@ namespace GameRPG.ViewModel
 
         public void MaxCoordinates()
         {
-            maxX = mapLists.Max(map => map.CoorX);
-            maxY = mapLists.Max(map => map.CoorY);
-            minX = mapLists.Min(map => map.CoorX);
-            minY = mapLists.Min(map => map.CoorY);
+            maxX = mapLists.Max(map => map.CoordinateX);
+            maxY = mapLists.Max(map => map.CoordinateY);
+            minX = mapLists.Min(map => map.CoordinateX);
+            minY = mapLists.Min(map => map.CoordinateY);
         }
 
         public void UpdateMapLocation()
         {
-            mapListIndex = mapLists.FindIndex(i => i.CoorY == CurrentNorthSouth && i.CoorX == CurrentEastWest);
+            mapListIndex = mapLists.FindIndex(i => i.CoordinateY == CurrentNorthSouth && i.CoordinateX == CurrentEastWest);
 
             MapImage = $"pack://application:,,,/Images/locations/{mapLists[mapListIndex].Description.ToLower()}.png";
             MapTitle = mapLists[mapListIndex].Title;
@@ -282,6 +285,44 @@ namespace GameRPG.ViewModel
             }
 
             EastButtonEnabled = true;
+        }
+
+        private void EventLocatorButton()
+        {
+            var homeLocation = string.Empty;
+
+            int currentMapListIndex = mapLists.FindIndex(i => i.CoordinateY == CurrentNorthSouth && i.CoordinateX == CurrentEastWest);
+
+            int itemIndex = mapLists.FindIndex(i => i.LocationEvent.Contains(EventNames[SelectedEventIndex]));
+
+            if (currentMapListIndex == itemIndex)
+            {
+                MessageBox.Show("You're already at this location");
+            }
+            else
+            {
+                for (int i = CurrentNorthSouth; i > mapLists[itemIndex].CoordinateY; i--)
+                {
+                    homeLocation += "South\n";
+                }
+
+                for (int i = CurrentEastWest; i > mapLists[itemIndex].CoordinateX; i--)
+                {
+                    homeLocation += "West\n";
+                }
+
+                for (int i = CurrentNorthSouth; i < mapLists[itemIndex].CoordinateY; i++)
+                {
+                    homeLocation += "North\n";
+                }
+
+                for (int i = CurrentEastWest; i < mapLists[itemIndex].CoordinateX; i++)
+                {
+                    homeLocation += "East\n";
+                }
+
+                MessageBox.Show($"Navigate:\n{homeLocation}");
+            }
         }
 
         public void AddQuests()
