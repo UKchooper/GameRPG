@@ -28,7 +28,7 @@ namespace GameRPG.View
 
             WhoCaresMarkII();
 
-            AddToComboBox();
+            //AddToComboBox();
         }
 
         public void WhoCares()
@@ -162,15 +162,15 @@ namespace GameRPG.View
             }
         }
 
-        public void AddToComboBox()
-        {
-            foreach (var eventos in mapLists)
-            {
-                if (!string.IsNullOrEmpty(eventos.LocationEvent))
-                {
-                    cbxHello.Items.Add(eventos.LocationEvent);
-                }
-            }
-        }
+        //public void AddToComboBox()
+        //{
+        //    foreach (var eventos in mapLists)
+        //    {
+        //        if (!string.IsNullOrEmpty(eventos.LocationEvent))
+        //        {
+        //            cbxHello.Items.Add(eventos.LocationEvent);
+        //        }
+        //    }
+        //}
     }
 }
