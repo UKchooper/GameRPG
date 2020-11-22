@@ -23,11 +23,13 @@ namespace GameRPG.ViewModel
         private bool eastButtonEnabled;
         private bool southButtonEnabled;
         private bool westButtonEnabled;
-        
+
         int mapListIndex;
+        int selectedEventIndex;
 
         List<Map> mapLists = new List<Map>();
         List<Quest> questList = new List<Quest>();
+
         public GameViewModel()
         {
             this.NorthButtonCommand = new DelegateCommand(this.NorthButton);
@@ -40,6 +42,7 @@ namespace GameRPG.ViewModel
             UpdateMapLocation();
             AddQuests();
             LocationButtonDefaults();
+            AddEvents();
         }
 
         public ICommand NorthButtonCommand { get; set; }
@@ -161,7 +164,22 @@ namespace GameRPG.ViewModel
             }
         }
 
+        public int SelectedEventIndex
+        {
+            get
+            {
+                return selectedEventIndex;
+            }
+            set
+            {
+                selectedEventIndex = value;
+                RaisePropertyChanged(nameof(SelectedEventIndex));
+                AddEvents();
+            }
+        }
+
         public ObservableCollection<string> QuestTitles { get; } = new ObservableCollection<string>();
+        public ObservableCollection<string> EventNames { get; } = new ObservableCollection<string>();
 
         public void AddLocations()
         {
@@ -303,6 +321,17 @@ namespace GameRPG.ViewModel
             if (CurrentEastWest == 0)
             {
                 WestButtonEnabled = false;
+            }
+        }
+
+        public void AddEvents()
+        {
+            foreach (var events in mapLists)
+            {
+                if (!string.IsNullOrEmpty(events.LocationEvent))
+                {
+                    EventNames.Add(events.LocationEvent);
+                }
             }
         }
     }

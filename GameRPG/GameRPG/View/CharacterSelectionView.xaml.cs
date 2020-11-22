@@ -12,11 +12,6 @@ namespace GameRPG.View
         public CharacterSelectionView()
         {
             InitializeComponent();
-            //DataContext = new CharacterSelectionViewModel();
-        }
-        private void btnConfirm_Click(object sender, RoutedEventArgs e)
-        {
-            //Window.GetWindow(this).DataContext = new FightViewModel();
         }
     }
 }

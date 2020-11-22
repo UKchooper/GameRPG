@@ -92,7 +92,7 @@
 
 
         <StackPanel Grid.Column="1" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="250" Margin="0,0,0,10">
-            <ComboBox x:Name="cbxHello" Margin="0,0,0,10" Height="25" SelectedIndex="0" />
+            <ComboBox x:Name="cbxHello" Margin="0,0,0,10" Height="25" ItemsSource="{Binding EventNames}" SelectedIndex="{Binding SelectedEventIndex}" />
             <Button Height="30" Content="Event locator" Click="Button_Click"/>
         </StackPanel>
 
@@ -112,12 +112,12 @@
             </Grid.RowDefinitions>
 
             <StackPanel Grid.Column="0">
-                <TextBlock Text="Area: " />
-                <TextBlock Text="Event: " />
-                <TextBlock Text="Type: " />
+                <TextBlock Text="Area:" />
+                <TextBlock Text="Event:" />
+                <TextBlock Text="Type:" />
             </StackPanel>
 
-            <StackPanel Grid.Column="1">
+            <StackPanel Grid.Column="1" Margin="2,0,0,0">
                 <TextBlock Text="{Binding MapTitle}" />
                 <TextBlock Text="{Binding MapEvent}" />
                 <TextBlock Text="{Binding MapDescription}" />
