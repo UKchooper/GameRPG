@@ -31,4 +31,3 @@ C:\Users\carl.hooper\source\repos\NewNewGame\GameRPG\GameRPG\obj\Debug\netcoreap
 C:\Users\carl.hooper\source\repos\NewNewGame\GameRPG\GameRPG\obj\Debug\netcoreapp3.1\GameRPG.dll
 C:\Users\carl.hooper\source\repos\NewNewGame\GameRPG\GameRPG\obj\Debug\netcoreapp3.1\GameRPG.pdb
 C:\Users\carl.hooper\source\repos\NewNewGame\GameRPG\GameRPG\obj\Debug\netcoreapp3.1\GameRPG.genruntimeconfig.cache
-C:\Users\carl.hooper\source\repos\NewNewGame\GameRPG\GameRPG\obj\Debug\netcoreapp3.1\GameRPG.csprojAssemblyReference.cache

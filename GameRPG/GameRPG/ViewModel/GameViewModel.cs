@@ -16,6 +16,15 @@ namespace GameRPG.ViewModel
         private int maxY;
         private int minX;
         private int minY;
+        private string name;
+        private string type;
+        private int level;
+        private int xp;
+        private int hp;
+        private int strength;
+        private int intelligence;
+        private int agility;
+
         private string mapTitle;
         private string mapEvent;
         private string mapDescription;
@@ -45,6 +54,7 @@ namespace GameRPG.ViewModel
             AddQuests();
             LocationButtonDefaults();
             AddEvents();
+            FakePerson();
         }
 
         public ICommand NorthButtonCommand { get; set; }
@@ -56,6 +66,110 @@ namespace GameRPG.ViewModel
         public ICommand WestButtonCommand { get; set; }
 
         public ICommand EventLocatorCommand { get; set; }
+
+        public string Name
+        {
+            get
+            {
+                return name;
+            }
+            set
+            {
+                name = value;
+                RaisePropertyChanged(nameof(this.Name));
+            }
+        }
+
+        public string Type
+        {
+            get
+            {
+                return type;
+            }
+            set
+            {
+                type = value;
+                RaisePropertyChanged(nameof(this.Type));
+            }
+        }
+
+        public int Level
+        {
+            get
+            {
+                return level;
+            }
+            set
+            {
+                level = value;
+                RaisePropertyChanged(nameof(this.Level));
+            }
+        }
+
+        public int XP
+        {
+            get
+            {
+                return xp;
+            }
+            set
+            {
+                xp = value;
+                RaisePropertyChanged(nameof(this.XP));
+            }
+        }
+
+        public int HP
+        {
+            get
+            {
+                return hp;
+            }
+            set
+            {
+                hp = value;
+                RaisePropertyChanged(nameof(this.HP));
+            }
+        }
+
+        public int Strength
+        {
+            get
+            {
+                return strength;
+            }
+            set
+            {
+                strength = value;
+                RaisePropertyChanged(nameof(this.Strength));
+            }
+        }
+
+        public int Intelligence
+        {
+            get
+            {
+                return intelligence;
+            }
+            set
+            {
+                intelligence = value;
+                RaisePropertyChanged(nameof(this.Intelligence));
+            }
+        }
+
+        public int Agility
+        {
+            get
+            {
+                return agility;
+            }
+            set
+            {
+                agility = value;
+                RaisePropertyChanged(nameof(this.Agility));
+            }
+        }
 
         public string MapTitle
         {
@@ -231,6 +345,9 @@ namespace GameRPG.ViewModel
             }
 
             SouthButtonEnabled = true;
+
+            TestingFight();
+            TestingActivatingSecondQuest();
         }
 
         private void EastButton()
@@ -249,6 +366,9 @@ namespace GameRPG.ViewModel
             }
 
             WestButtonEnabled = true;
+
+            TestingFight();
+            TestingActivatingSecondQuest();
         }
 
         private void SouthButton()
@@ -267,6 +387,9 @@ namespace GameRPG.ViewModel
             }
 
             NorthButtonEnabled = true;
+
+            TestingFight();
+            TestingActivatingSecondQuest();
         }
 
         private void WestButton()
@@ -285,6 +408,9 @@ namespace GameRPG.ViewModel
             }
 
             EastButtonEnabled = true;
+
+            TestingFight();
+            TestingActivatingSecondQuest();
         }
 
         private void EventLocatorButton()
@@ -327,19 +453,13 @@ namespace GameRPG.ViewModel
 
         public void AddQuests()
         {
-            questList.Add(new Quest("Search the map", "Find out what is out there!", 1, "Peach"));
-            questList.Add(new Quest("Defeat Bob", "Defeat the best Bob", 2, "Potato"));
-            questList.Add(new Quest("Eat food", "Becafeful!", 3, "Sword"));
-            questList.Add(new Quest("Speak to Malcolm", "He might not be who he says he is", 4, "Better sword"));
-            questList.Add(new Quest("Die", "Oh dear", 5, "grape"));
+            questList.Add(new Quest("1. Search the map", "Find out what is out there!", 1, "Peach", true, false));
+            questList.Add(new Quest("2. Defeat Bob", "Defeat the best Bob", 2, "Potato", false, false));
+            questList.Add(new Quest("3. Eat food", "Becafeful!", 3, "Sword", false, false));
+            questList.Add(new Quest("4. Speak to Malcolm", "He might not be who he says he is", 4, "Better sword", false, false));
+            questList.Add(new Quest("5. Die", "Oh dear", 5, "grape", false, false));
 
-            int number = 1;
-
-            foreach (var quest in questList)
-            {
-                QuestTitles.Add($"Quest {number}: {quest.Title}");
-                number++;
-            }
+            AddActiveQuests();
         }
 
         public void LocationButtonDefaults()
@@ -373,6 +493,51 @@ namespace GameRPG.ViewModel
                 {
                     EventNames.Add(events.LocationEvent);
                 }
+            }
+        }
+
+        public void AddActiveQuests()
+        {
+            foreach (var quest in questList)
+            {
+                if (!QuestTitles.Contains(quest.Title) && quest.IsActive)
+                {
+                    QuestTitles.Add(quest.Title);
+                }
+            }
+        }
+
+        public void FakePerson()
+        {
+            Name = "Carl";
+            Type = "Warrior";
+            Level = 1;
+            XP = 0;
+            HP = 100;
+            Strength = 3;
+            Intelligence = 4;
+            Agility = 5;
+        }
+
+        public void TestingFight()
+        {
+            if (mapLists[mapListIndex].LocationEvent == "Fight #1" || mapLists[mapListIndex].LocationEvent == "Fight #2")
+            {
+                HP--;
+                XP += 5;
+            }
+        }
+
+        public void TestingActivatingSecondQuest()
+        {
+            if (mapListIndex == mapLists.FindIndex(ml => ml.LocationEvent.Contains("Quest #1")))
+            {
+                questList[1].IsActive = true;
+              
+                // QuestTitles.Remove(QuestTitles[0]);
+                // QuestTitles.Insert(0, "Complete!");
+
+                AddActiveQuests();
             }
         }
     }

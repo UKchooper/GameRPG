@@ -41,25 +41,25 @@
             <TextBlock Text="Character Info:" Grid.ColumnSpan="2" FontSize="15" HorizontalAlignment="Left" Margin="10,0,0,0"/>
 
             <StackPanel Grid.Row="1" Margin="10,5">
-                <TextBlock Text="Name:"/>
-                <TextBlock Text="Type"/>
-                <TextBlock Text="Level:"/>
-                <TextBlock Text="Experience:"/>
-                <TextBlock Text="Health:"/>
-                <TextBlock Text="Strength:"/>
-                <TextBlock Text="Intelligence:"/>
-                <TextBlock Text="Agility:"/>
+                <TextBlock Text="Name:" />
+                <TextBlock Text="Type" />
+                <TextBlock Text="Level:" />
+                <TextBlock Text="Experience:" />
+                <TextBlock Text="Health:" />
+                <TextBlock Text="Strength:" />
+                <TextBlock Text="Intelligence:" />
+                <TextBlock Text="Agility:" />
             </StackPanel>
 
             <StackPanel Grid.Column="1" Grid.Row="1" Margin="10,5">
-                <TextBlock Text="{Binding Name}"/>
-                <TextBlock Text="Warrior"/>
-                <TextBlock Text="1"/>
-                <TextBlock Text="0"/>
-                <TextBlock Text="{Binding HP}"/>
-                <TextBlock Text="1"/>
-                <TextBlock Text="1"/>
-                <TextBlock Text="1"/>
+                <TextBlock Text="{Binding Name}" />
+                <TextBlock Text="{Binding Type}" />
+                <TextBlock Text="{Binding Level}" />
+                <TextBlock Text="{Binding XP}" />
+                <TextBlock Text="{Binding HP}" />
+                <TextBlock Text="{Binding Strength}" />
+                <TextBlock Text="{Binding Intelligence}" />
+                <TextBlock Text="{Binding Agility}" />
             </StackPanel>
         </Grid>
 
@@ -67,10 +67,10 @@
             <TextBlock Text="Health:" HorizontalAlignment="Center" />
             <ProgressBar Margin="2" Minimum="0" Maximum="100" Value="{Binding HP}" Foreground="Red" />
             <TextBlock Text="Experience:" HorizontalAlignment="Center"/>
-            <ProgressBar Margin="2" Minimum="0" Maximum="100" Value="75" Foreground="BlueViolet"/>
+            <ProgressBar Margin="2" Minimum="0" Maximum="100" Value="{Binding XP}" Foreground="BlueViolet"/>
         </StackPanel>
 
-        <ListView x:Name="lbxQuest" Margin="10,10" Grid.Column="0" Grid.Row="2" Background="AliceBlue" BorderThickness="0.5" Width="240" HorizontalAlignment="Left" ItemsSource="{Binding QuestTitles}" SelectedIndex="{Binding SelectedQuestIndex}">
+        <ListView Margin="10,10" Grid.Column="0" Grid.Row="2" Background="AliceBlue" BorderThickness="0.5" Width="240" HorizontalAlignment="Left" ItemsSource="{Binding QuestTitles}" SelectedIndex="{Binding SelectedQuestIndex}">
             <ListView.Resources>
                 <Style TargetType="{x:Type GridViewColumnHeader}">
                     <Setter Property="HorizontalContentAlignment" Value="Left" />
@@ -93,7 +93,7 @@
 
         <StackPanel Grid.Column="1" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="250" Margin="0,0,0,10">
             <ComboBox x:Name="cbxHello" Margin="0,0,0,10" Height="25" ItemsSource="{Binding EventNames}" SelectedIndex="{Binding SelectedEventIndex}" />
-            <Button Height="30" Content="Event locator" Click="Button_Click" Command="{Binding EventLocatorCommand}"/>
+            <Button Height="30" Content="Event locator" Command="{Binding EventLocatorCommand}"/>
         </StackPanel>
 
         <!-- Right column -->
