@@ -1,10 +1,7 @@
-﻿using GameRPG.ViewModel;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media.Imaging;
 
 namespace GameRPG.View
 {
@@ -23,7 +20,6 @@ namespace GameRPG.View
         int minY;
 
         List<Map> mapLists = new List<Map>();
-        List<Quest> questList = new List<Quest>();
         public GameView()
         {
             InitializeComponent();
@@ -35,8 +31,6 @@ namespace GameRPG.View
             WhoCaresMarkII();
 
             AddToComboBox();
-
-            AddToQuests();
         }
 
         public void WhoCares()
@@ -50,12 +44,6 @@ namespace GameRPG.View
             mapLists.Add(new Map(0, 1, "Desert #3", "Sand", "Fight #2"));
             mapLists.Add(new Map(0, 2, "Ocean #2", "Ocean", "Quest #1"));
             mapLists.Add(new Map(1, 2, "Ocean #3", "Ocean", ""));
-
-            questList.Add(new Quest("Search the map", "Find out what is out there!", 1, "Peach"));
-            questList.Add(new Quest("Defeat Bob", "Defeat the best Bob", 2, "Potato"));
-            questList.Add(new Quest("Eat food", "Becafeful!", 3, "Sword"));
-            questList.Add(new Quest("Speak to Malcolm", "He might not be who he says he is", 4, "Better sword"));
-            questList.Add(new Quest("Die", "Oh dear", 5, "grape"));
 
             MaxCoord();
         }
@@ -230,18 +218,6 @@ namespace GameRPG.View
                 {
                     cbxHello.Items.Add(eventos.LocationEvent);
                 }
-            }
-        }
-
-        public void AddToQuests()
-        {
-            int number = 1;
-
-            foreach (var quests in questList)
-            {
-
-                lbxQuest.Items.Add($"Quest {number}: {quests.Title}");
-                number++;
             }
         }
     }

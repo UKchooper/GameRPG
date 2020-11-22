@@ -2,6 +2,7 @@
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
@@ -23,6 +24,7 @@ namespace GameRPG.ViewModel
         int mapListIndex;
 
         List<Map> mapLists = new List<Map>();
+        List<Quest> questList = new List<Quest>();
         public GameViewModel()
         {
             this.NorthButtonCommand = new DelegateCommand(this.NorthButton);
@@ -33,12 +35,17 @@ namespace GameRPG.ViewModel
             AddLocations();
             MaxCoordinates();
             UpdateMapLocation();
+            AddQuests();
         }
 
         public ICommand NorthButtonCommand { get; set; }
+        
         public ICommand EastButtonCommand { get; set; }
+        
         public ICommand SouthhButtonCommand { get; set; }
+        
         public ICommand WestButtonCommand { get; set; }
+        
         public string MapTitle
         {
             get
@@ -51,6 +58,7 @@ namespace GameRPG.ViewModel
                 RaisePropertyChanged(nameof(this.MapTitle));
             }
         }
+        
         public string MapEvent
         {
             get
@@ -70,6 +78,7 @@ namespace GameRPG.ViewModel
                 RaisePropertyChanged(nameof(this.MapEvent));
             }
         }
+        
         public string MapDescription
         {
             get
@@ -82,6 +91,7 @@ namespace GameRPG.ViewModel
                 RaisePropertyChanged(nameof(this.MapDescription));
             }
         }
+        
         public string MapImage
         {
             get
@@ -94,6 +104,8 @@ namespace GameRPG.ViewModel
                 RaisePropertyChanged(nameof(this.MapImage));
             }
         }
+
+        public ObservableCollection<string> QuestTitles { get; } = new ObservableCollection<string>();
 
         public void AddLocations()
         {
@@ -153,5 +165,21 @@ namespace GameRPG.ViewModel
             UpdateMapLocation();
         }
 
+        public void AddQuests()
+        {
+            questList.Add(new Quest("Search the map", "Find out what is out there!", 1, "Peach"));
+            questList.Add(new Quest("Defeat Bob", "Defeat the best Bob", 2, "Potato"));
+            questList.Add(new Quest("Eat food", "Becafeful!", 3, "Sword"));
+            questList.Add(new Quest("Speak to Malcolm", "He might not be who he says he is", 4, "Better sword"));
+            questList.Add(new Quest("Die", "Oh dear", 5, "grape"));
+
+            int number = 1;
+
+            foreach (var quest in questList)
+            {
+                QuestTitles.Add($"Quest {number}: {quest.Title}");
+                number++;
+            }
+        }
     }
 }
