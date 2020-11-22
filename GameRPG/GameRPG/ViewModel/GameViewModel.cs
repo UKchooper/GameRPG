@@ -1,11 +1,9 @@
 ﻿using Prism.Commands;
 using Prism.Mvvm;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
-using System.Windows.Media.Imaging;
 
 namespace GameRPG.ViewModel
 {
@@ -21,6 +19,11 @@ namespace GameRPG.ViewModel
         private string mapEvent;
         private string mapDescription;
         private string mapImage;
+        private bool northButtonEnabled;
+        private bool eastButtonEnabled;
+        private bool southButtonEnabled;
+        private bool westButtonEnabled;
+        
         int mapListIndex;
 
         List<Map> mapLists = new List<Map>();
@@ -29,20 +32,21 @@ namespace GameRPG.ViewModel
         {
             this.NorthButtonCommand = new DelegateCommand(this.NorthButton);
             this.EastButtonCommand = new DelegateCommand(this.EastButton);
-            this.SouthhButtonCommand = new DelegateCommand(this.SouthButton);
+            this.SouthButtonCommand = new DelegateCommand(this.SouthButton);
             this.WestButtonCommand = new DelegateCommand(this.WestButton);
 
             AddLocations();
             MaxCoordinates();
             UpdateMapLocation();
             AddQuests();
+            LocationButtonDefaults();
         }
 
         public ICommand NorthButtonCommand { get; set; }
         
         public ICommand EastButtonCommand { get; set; }
         
-        public ICommand SouthhButtonCommand { get; set; }
+        public ICommand SouthButtonCommand { get; set; }
         
         public ICommand WestButtonCommand { get; set; }
         
@@ -105,6 +109,58 @@ namespace GameRPG.ViewModel
             }
         }
 
+        public bool NorthButtonEnabled
+        {
+            get
+            {
+                return northButtonEnabled;
+            }
+            set
+            {
+                northButtonEnabled = value;
+                RaisePropertyChanged(nameof(this.NorthButtonEnabled));
+            }
+        }
+
+        public bool EastButtonEnabled
+        {
+            get
+            {
+                return eastButtonEnabled;
+            }
+            set
+            {
+                eastButtonEnabled = value;
+                RaisePropertyChanged(nameof(this.EastButtonEnabled));
+            }
+        }
+
+        public bool SouthButtonEnabled
+        {
+            get
+            {
+                return southButtonEnabled;
+            }
+            set
+            {
+                southButtonEnabled = value;
+                RaisePropertyChanged(nameof(this.SouthButtonEnabled));
+            }
+        }
+
+        public bool WestButtonEnabled
+        {
+            get
+            {
+                return westButtonEnabled;
+            }
+            set
+            {
+                westButtonEnabled = value;
+                RaisePropertyChanged(nameof(this.WestButtonEnabled));
+            }
+        }
+
         public ObservableCollection<string> QuestTitles { get; } = new ObservableCollection<string>();
 
         public void AddLocations()
@@ -143,6 +199,17 @@ namespace GameRPG.ViewModel
             CurrentNorthSouth++;
 
             UpdateMapLocation();
+
+            if(CurrentNorthSouth == maxX)
+            {
+                NorthButtonEnabled = false;
+            }
+            else
+            {
+                NorthButtonEnabled = true;
+            }
+
+            SouthButtonEnabled = true;
         }
 
         private void EastButton()
@@ -150,12 +217,35 @@ namespace GameRPG.ViewModel
             CurrentEastWest++;
 
             UpdateMapLocation();
+
+            if(CurrentEastWest == maxY)
+            {
+                EastButtonEnabled = false;
+            }
+            else
+            {
+                EastButtonEnabled = true;
+            }
+
+            WestButtonEnabled = true;
         }
+
         private void SouthButton()
         {
             CurrentNorthSouth--;
 
             UpdateMapLocation();
+
+            if (CurrentNorthSouth == minX)
+            {
+                SouthButtonEnabled = false;
+            }
+            else
+            {
+                SouthButtonEnabled = true;
+            }
+
+            NorthButtonEnabled = true;
         }
 
         private void WestButton()
@@ -163,6 +253,17 @@ namespace GameRPG.ViewModel
             CurrentEastWest--;
 
             UpdateMapLocation();
+
+            if (CurrentEastWest == minY)
+            {
+                WestButtonEnabled = false;
+            }
+            else
+            {
+                WestButtonEnabled = true;
+            }
+
+            EastButtonEnabled = true;
         }
 
         public void AddQuests()
@@ -179,6 +280,29 @@ namespace GameRPG.ViewModel
             {
                 QuestTitles.Add($"Quest {number}: {quest.Title}");
                 number++;
+            }
+        }
+
+        public void LocationButtonDefaults()
+        {
+            if (CurrentNorthSouth == 0)
+            {
+                NorthButtonEnabled = true;
+            }
+
+            if (CurrentNorthSouth == 0)
+            {
+                EastButtonEnabled = true;
+            }
+
+            if (CurrentNorthSouth == 0)
+            {
+                SouthButtonEnabled = false;
+            }
+
+            if (CurrentEastWest == 0)
+            {
+                WestButtonEnabled = false;
             }
         }
     }

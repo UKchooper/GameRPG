@@ -24,8 +24,6 @@ namespace GameRPG.View
         {
             InitializeComponent();
 
-            DisableSouthWest();
-
             WhoCares();
 
             WhoCaresMarkII();
@@ -53,16 +51,6 @@ namespace GameRPG.View
             CurrentNorthSouth++;
 
             WhoCaresMarkII();
-
-            if (btnSouth.IsEnabled == false)
-            {
-                btnSouth.IsEnabled = true;
-            }
-
-            if (CurrentNorthSouth == maxX)
-            {
-                btnNorth.IsEnabled = false;
-            }
         }
 
         private void btnSouth_Click(object sender, RoutedEventArgs e)
@@ -70,16 +58,6 @@ namespace GameRPG.View
             CurrentNorthSouth--;
 
             WhoCaresMarkII();
-
-            if (btnNorth.IsEnabled == false)
-            {
-                btnNorth.IsEnabled = true;
-            }
-
-            if (CurrentNorthSouth == minX)
-            {
-                btnSouth.IsEnabled = false;
-            }
         }
 
         private void ButtonEast_Click(object sender, RoutedEventArgs e)
@@ -87,16 +65,6 @@ namespace GameRPG.View
             CurrentEastWest++;
 
             WhoCaresMarkII();
-
-            if (btnWest.IsEnabled == false)
-            {
-                btnWest.IsEnabled = true;
-            }
-
-            if (CurrentEastWest == maxY)
-            {
-                btnEast.IsEnabled = false;
-            }
         }
 
         private void btnWest_Click(object sender, RoutedEventArgs e)
@@ -104,16 +72,6 @@ namespace GameRPG.View
             CurrentEastWest--;
 
             WhoCaresMarkII();
-
-            if (btnEast.IsEnabled == false)
-            {
-                btnEast.IsEnabled = true;
-            }
-
-            if (CurrentEastWest == minY)
-            {
-                btnWest.IsEnabled = false;
-            }
         }
 
         public void WhoCaresMarkII()
@@ -159,12 +117,6 @@ namespace GameRPG.View
                 default:
                     break;
             }
-        }
-
-        public void DisableSouthWest()
-        {
-            btnSouth.IsEnabled = false;
-            btnWest.IsEnabled = false;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
