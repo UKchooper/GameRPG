@@ -6,7 +6,7 @@ namespace GameRPG.ViewModel
 {
     class FightViewModel : BindableBase
     {
-        const string enemyFile = @"C:\Users\carl.hooper\Desktop\GameoStuffo\TextFiles\Enemy.txt";
+        const string enemyFile = @"C:\Users\carl.hooper\Desktop\GameoStuffo\TextFiles\Enemies.txt";
 
         private string name;
         private string type;

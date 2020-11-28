@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace GameRPG
 {
@@ -50,7 +48,7 @@ namespace GameRPG
 
             return stats;
         }
-        public Character ReadStatCharactersFromTxtLine(string txtLine)
+        private Character ReadStatCharactersFromTxtLine(string txtLine)
         {
             string[] parts = txtLine.Split(',');
 
@@ -80,7 +78,7 @@ namespace GameRPG
             return stats;
         }
 
-        public Enemy ReadEnemiesFromTxtLine(string txtLine)
+        private Enemy ReadEnemiesFromTxtLine(string txtLine)
         {
             string[] parts = txtLine.Split(',');
 
@@ -93,6 +91,61 @@ namespace GameRPG
             int defence = int.Parse(parts[6]);
 
             return new Enemy(name, type, description, level, hp, attack, defence);
+        }
+
+        public List<Location> ReadLocations()
+        {
+            List<Location> locations = new List<Location>();
+
+            using StreamReader sr = new StreamReader(TxtFilePath);
+            for (int i = 0; i < File.ReadLines(TxtFilePath).Count(); i++)
+            {
+                string txtLine = sr.ReadLine();
+                locations.Add(ReadLocationsFromTxtLine(txtLine));
+            }
+
+            return locations;
+        }
+
+        private Location ReadLocationsFromTxtLine(string txtLine)
+        {
+            string[] parts = txtLine.Split(',');
+
+            int coordinateX = int.Parse(parts[0]);
+            int coordinateY = int.Parse(parts[1]);
+            string description = parts[2];
+            string type = parts[3];
+            string locationEvent = parts[4];
+
+            return new Location(coordinateX, coordinateY, description, type, locationEvent);
+        }
+
+        public List<Quest> ReadQuests()
+        {
+            List<Quest> quests = new List<Quest>();
+
+            using StreamReader sr = new StreamReader(TxtFilePath);
+            for (int i = 0; i < File.ReadLines(TxtFilePath).Count(); i++)
+            {
+                string txtLine = sr.ReadLine();
+                quests.Add(ReadQuestsFromTxtLine(txtLine));
+            }
+
+            return quests;
+        }
+
+        private Quest ReadQuestsFromTxtLine(string txtLine)
+        {
+            string[] parts = txtLine.Split(',');
+
+            string title = parts[0];
+            string description = parts[1];
+            int difficulty = int.Parse(parts[2]);
+            string reward = parts[3];
+            bool isActive = bool.Parse(parts[4]);
+            bool isComplete = bool.Parse(parts[5]);
+
+            return new Quest(title, description, difficulty, reward, isActive, isComplete);
         }
     }
 }

@@ -10,12 +10,6 @@ namespace GameRPG.ViewModel
 {
     public class GameViewModel : BindableBase
     {
-        private int CurrentNorthSouth = 0;
-        private int CurrentEastWest = 0;
-        private int maxX;
-        private int maxY;
-        private int minX;
-        private int minY;
         private string name;
         private string type;
         private int level;
@@ -25,6 +19,12 @@ namespace GameRPG.ViewModel
         private int intelligence;
         private int agility;
 
+        private int CurrentNorthSouth = 0;
+        private int CurrentEastWest = 0;
+        private int maxY;
+        private int maxX;
+        private int minY;
+        private int minX;
         private string mapTitle;
         private string mapEvent;
         private string mapDescription;
@@ -37,8 +37,9 @@ namespace GameRPG.ViewModel
         int mapListIndex;
         int selectedEventIndex;
 
-        List<Map> mapLists = new List<Map>();
-        List<Quest> questList = new List<Quest>();
+        public List<Location> locationLists;
+        public List<Quest> questList;
+        List<Enemy> enemyList = new List<Enemy>();
 
         public GameViewModel()
         {
@@ -192,7 +193,7 @@ namespace GameRPG.ViewModel
             }
             set
             {
-                if (!string.IsNullOrWhiteSpace(mapLists[mapListIndex].LocationEvent))
+                if (!string.IsNullOrWhiteSpace(locationLists[mapListIndex].LocationEvent))
                 {
                     mapEvent = value;
                 }
@@ -300,33 +301,28 @@ namespace GameRPG.ViewModel
 
         public void AddLocations()
         {
-            mapLists.Add(new Map(0, 0, "Starting location - Grassland #1", "Grass", ""));
-            mapLists.Add(new Map(1, 0, "Ocean #1", "Ocean", "Shop"));
-            mapLists.Add(new Map(2, 0, "Desert #1", "Sand", ""));
-            mapLists.Add(new Map(1, 1, "Desert #2", "Sand", "Fight #1"));
-            mapLists.Add(new Map(2, 1, "Grassland #2", "Grass", ""));
-            mapLists.Add(new Map(2, 2, "Grassland #3", "Grass", ""));
-            mapLists.Add(new Map(0, 1, "Desert #3", "Sand", "Fight #2"));
-            mapLists.Add(new Map(0, 2, "Ocean #2", "Ocean", "Quest #1"));
-            mapLists.Add(new Map(1, 2, "Ocean #3", "Ocean", ""));
+            const string locationFile = @"C:\Users\carl.hooper\Desktop\GameoStuffo\TextFiles\Locations.txt";
+
+            TxtReader locationReader = new TxtReader(locationFile);
+            locationLists = locationReader.ReadLocations();
         }
 
         public void MaxCoordinates()
         {
-            maxX = mapLists.Max(map => map.CoordinateX);
-            maxY = mapLists.Max(map => map.CoordinateY);
-            minX = mapLists.Min(map => map.CoordinateX);
-            minY = mapLists.Min(map => map.CoordinateY);
+            maxY = locationLists.Max(map => map.CoordinateY);
+            maxX = locationLists.Max(map => map.CoordinateX);
+            minY = locationLists.Min(map => map.CoordinateY);
+            minX = locationLists.Min(map => map.CoordinateX);
         }
 
         public void UpdateMapLocation()
         {
-            mapListIndex = mapLists.FindIndex(i => i.CoordinateY == CurrentNorthSouth && i.CoordinateX == CurrentEastWest);
+            mapListIndex = locationLists.FindIndex(i => i.CoordinateY == CurrentNorthSouth && i.CoordinateX == CurrentEastWest);
 
-            MapImage = $"pack://application:,,,/Images/locations/{mapLists[mapListIndex].Description.ToLower()}.png";
-            MapTitle = mapLists[mapListIndex].Title;
-            MapEvent = mapLists[mapListIndex].LocationEvent;
-            MapDescription = mapLists[mapListIndex].Description;
+            MapImage = $"pack://application:,,,/Images/locations/{locationLists[mapListIndex].Description.ToLower()}.png";
+            MapTitle = locationLists[mapListIndex].Title;
+            MapEvent = locationLists[mapListIndex].LocationEvent;
+            MapDescription = locationLists[mapListIndex].Description;
         }
 
         private void NorthButton()
@@ -417,9 +413,9 @@ namespace GameRPG.ViewModel
         {
             var homeLocation = string.Empty;
 
-            int currentMapListIndex = mapLists.FindIndex(i => i.CoordinateY == CurrentNorthSouth && i.CoordinateX == CurrentEastWest);
+            int currentMapListIndex = locationLists.FindIndex(i => i.CoordinateY == CurrentNorthSouth && i.CoordinateX == CurrentEastWest);
 
-            int itemIndex = mapLists.FindIndex(i => i.LocationEvent.Contains(EventNames[SelectedEventIndex]));
+            int itemIndex = locationLists.FindIndex(i => i.LocationEvent.Contains(EventNames[SelectedEventIndex]));
 
             if (currentMapListIndex == itemIndex)
             {
@@ -427,22 +423,22 @@ namespace GameRPG.ViewModel
             }
             else
             {
-                for (int i = CurrentNorthSouth; i > mapLists[itemIndex].CoordinateY; i--)
+                for (int i = CurrentNorthSouth; i > locationLists[itemIndex].CoordinateY; i--)
                 {
                     homeLocation += "South\n";
                 }
 
-                for (int i = CurrentEastWest; i > mapLists[itemIndex].CoordinateX; i--)
+                for (int i = CurrentEastWest; i > locationLists[itemIndex].CoordinateX; i--)
                 {
                     homeLocation += "West\n";
                 }
 
-                for (int i = CurrentNorthSouth; i < mapLists[itemIndex].CoordinateY; i++)
+                for (int i = CurrentNorthSouth; i < locationLists[itemIndex].CoordinateY; i++)
                 {
                     homeLocation += "North\n";
                 }
 
-                for (int i = CurrentEastWest; i < mapLists[itemIndex].CoordinateX; i++)
+                for (int i = CurrentEastWest; i < locationLists[itemIndex].CoordinateX; i++)
                 {
                     homeLocation += "East\n";
                 }
@@ -453,11 +449,10 @@ namespace GameRPG.ViewModel
 
         public void AddQuests()
         {
-            questList.Add(new Quest("1. Search the map", "Find out what is out there!", 1, "Peach", true, false));
-            questList.Add(new Quest("2. Defeat Bob", "Defeat the best Bob", 2, "Potato", false, false));
-            questList.Add(new Quest("3. Eat food", "Becafeful!", 3, "Sword", false, false));
-            questList.Add(new Quest("4. Speak to Malcolm", "He might not be who he says he is", 4, "Better sword", false, false));
-            questList.Add(new Quest("5. Die", "Oh dear", 5, "grape", false, false));
+            const string questFile = @"C:\Users\carl.hooper\Desktop\GameoStuffo\TextFiles\Quests.txt";
+
+            TxtReader questReader = new TxtReader(questFile);
+            questList = questReader.ReadQuests();
 
             AddActiveQuests();
         }
@@ -487,7 +482,7 @@ namespace GameRPG.ViewModel
 
         public void AddEvents()
         {
-            foreach (var events in mapLists)
+            foreach (var events in locationLists)
             {
                 if (!string.IsNullOrEmpty(events.LocationEvent))
                 {
@@ -507,6 +502,8 @@ namespace GameRPG.ViewModel
             }
         }
 
+        // Redo FakePerson, TestingFight and TestingActivatingSecondQuest, Add Enemies
+
         public void FakePerson()
         {
             Name = "Carl";
@@ -521,7 +518,7 @@ namespace GameRPG.ViewModel
 
         public void TestingFight()
         {
-            if (mapLists[mapListIndex].LocationEvent == "Fight #1" || mapLists[mapListIndex].LocationEvent == "Fight #2")
+            if (locationLists[mapListIndex].LocationEvent == "Fight #1" || locationLists[mapListIndex].LocationEvent == "Fight #2")
             {
                 HP--;
                 XP += 5;
@@ -530,7 +527,7 @@ namespace GameRPG.ViewModel
 
         public void TestingActivatingSecondQuest()
         {
-            if (mapListIndex == mapLists.FindIndex(ml => ml.LocationEvent.Contains("Quest #1")))
+            if (mapListIndex == locationLists.FindIndex(ml => ml.LocationEvent.Contains("Quest #1")))
             {
                 questList[1].IsActive = true;
               
@@ -539,6 +536,11 @@ namespace GameRPG.ViewModel
 
                 AddActiveQuests();
             }
+        }
+
+        public void AddEnemies()
+        {
+           // enemyList.Add(new Enemy())
         }
     }
 }
