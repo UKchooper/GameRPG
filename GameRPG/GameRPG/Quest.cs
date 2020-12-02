@@ -1,22 +1,93 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Prism.Mvvm;
 
 namespace GameRPG
 {
-    public class Quest
+    public class Quest : BindableBase
     {
-        public string Title { get; set; }
+        private string title;
+        private string description;
+        private int difficulty;
+        private string reward;
+        private bool isActive;
+        private bool isComplete;
 
-        public string Description { get; set; }
+        public string Title
+        {
+            get
+            {
+                return title;
+            }
+            set
+            {
+                title = value;
+                RaisePropertyChanged(nameof(this.Title));
+            }
+        }
 
-        public int Difficulty { get; set; }
+        public string Description
+        {
+            get
+            {
+                return description;
+            }
+            set
+            {
+                description = value;
+                RaisePropertyChanged(nameof(this.Description));
+            }
+        }
 
-        public string Reward { get; set; }
+        public int Difficulty
+        {
+            get
+            {
+                return difficulty;
+            }
+            set
+            {
+                difficulty = value;
+                RaisePropertyChanged(nameof(this.Difficulty));
+            }
+        }
 
-        public bool IsActive { get; set; }
+        public string Reward
+        {
+            get
+            {
+                return reward;
+            }
+            set
+            {
+                reward = value;
+                RaisePropertyChanged(nameof(this.Reward));
+            }
+        }
 
-        public bool IsComplete { get; set; }
+        public bool IsActive
+        {
+            get
+            {
+                return isActive;
+            }
+            set
+            {
+                isActive = value;
+                RaisePropertyChanged(nameof(this.IsActive));
+            }
+        }
+
+        public bool IsComplete
+        {
+            get
+            {
+                return isComplete;
+            }
+            set
+            {
+                isComplete = value;
+                RaisePropertyChanged(nameof(this.IsComplete));
+            }
+        }
 
         public Quest(string title, string description, int difficulty, string reward, bool isActive, bool isComplete)
         {

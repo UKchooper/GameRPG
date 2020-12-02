@@ -21,7 +21,6 @@
         <!-- Left column-->
 
         <Grid>
-
             <Grid.Resources>
                 <Style TargetType="TextBlock">
                     <Setter Property="FontSize" Value="15"/>
@@ -70,18 +69,17 @@
             <ProgressBar Margin="2" Minimum="0" Maximum="100" Value="{Binding XP}" Foreground="BlueViolet"/>
         </StackPanel>
 
-        <ListView Margin="10,10" Grid.Column="0" Grid.Row="2" Background="AliceBlue" BorderThickness="0.5" Width="240" HorizontalAlignment="Left" ItemsSource="{Binding QuestTitles}" SelectedIndex="{Binding SelectedQuestIndex}">
-            <ListView.Resources>
+        <DataGrid Margin="10,10" Grid.Column="0" Grid.Row="2" Background="AliceBlue" BorderThickness="0.5" Width="240" HorizontalAlignment="Left" AutoGenerateColumns="False" ItemsSource="{Binding Quest}" >
+            <DataGrid.Resources>
                 <Style TargetType="{x:Type GridViewColumnHeader}">
                     <Setter Property="HorizontalContentAlignment" Value="Left" />
                 </Style>
-            </ListView.Resources>
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Quests:" Width="240" />
-                </GridView>
-            </ListView.View>
-        </ListView>
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Quests:" Binding="{Binding Title}" Width="161"/>
+                <DataGridTextColumn Header="IsComplete:" Binding="{Binding IsComplete}" />
+            </DataGrid.Columns>
+        </DataGrid>
 
         <!-- Middle columns -->
 

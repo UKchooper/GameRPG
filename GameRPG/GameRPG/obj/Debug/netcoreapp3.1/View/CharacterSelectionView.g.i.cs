@@ -52,7 +52,7 @@ namespace GameRPG.View {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/GameRPG;V1.0.0.0;component/view/characterselectionview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/GameRPG;component/view/characterselectionview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\View\CharacterSelectionView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

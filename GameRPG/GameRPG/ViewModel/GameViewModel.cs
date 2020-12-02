@@ -21,10 +21,6 @@ namespace GameRPG.ViewModel
 
         private int CurrentNorthSouth = 0;
         private int CurrentEastWest = 0;
-        private int maxY;
-        private int maxX;
-        private int minY;
-        private int minX;
         private string mapTitle;
         private string mapEvent;
         private string mapDescription;
@@ -39,7 +35,8 @@ namespace GameRPG.ViewModel
 
         public List<Location> locationLists;
         public List<Quest> questList;
-        List<Enemy> enemyList = new List<Enemy>();
+        // Unused atm
+        //List<Enemy> enemyList = new List<Enemy>();
 
         public GameViewModel()
         {
@@ -50,20 +47,19 @@ namespace GameRPG.ViewModel
             this.EventLocatorCommand = new DelegateCommand(this.EventLocatorButton);
 
             AddLocations();
-            MaxCoordinates();
+            UpdateDirectionalButtons();
             UpdateMapLocation();
             AddQuests();
-            LocationButtonDefaults();
             AddEvents();
             FakePerson();
         }
 
         public ICommand NorthButtonCommand { get; set; }
-        
+
         public ICommand EastButtonCommand { get; set; }
-        
+
         public ICommand SouthButtonCommand { get; set; }
-        
+
         public ICommand WestButtonCommand { get; set; }
 
         public ICommand EventLocatorCommand { get; set; }
@@ -184,7 +180,7 @@ namespace GameRPG.ViewModel
                 RaisePropertyChanged(nameof(this.MapTitle));
             }
         }
-        
+
         public string MapEvent
         {
             get
@@ -204,7 +200,7 @@ namespace GameRPG.ViewModel
                 RaisePropertyChanged(nameof(this.MapEvent));
             }
         }
-        
+
         public string MapDescription
         {
             get
@@ -217,7 +213,7 @@ namespace GameRPG.ViewModel
                 RaisePropertyChanged(nameof(this.MapDescription));
             }
         }
-        
+
         public string MapImage
         {
             get
@@ -296,7 +292,8 @@ namespace GameRPG.ViewModel
             }
         }
 
-        public ObservableCollection<string> QuestTitles { get; } = new ObservableCollection<string>();
+        public TrulyObservableCollection<Quest> Quest { get; set; } = new TrulyObservableCollection<Quest>();
+
         public ObservableCollection<string> EventNames { get; } = new ObservableCollection<string>();
 
         public void AddLocations()
@@ -305,14 +302,6 @@ namespace GameRPG.ViewModel
 
             TxtReader locationReader = new TxtReader(locationFile);
             locationLists = locationReader.ReadLocations();
-        }
-
-        public void MaxCoordinates()
-        {
-            maxY = locationLists.Max(map => map.CoordinateY);
-            maxX = locationLists.Max(map => map.CoordinateX);
-            minY = locationLists.Min(map => map.CoordinateY);
-            minX = locationLists.Min(map => map.CoordinateX);
         }
 
         public void UpdateMapLocation()
@@ -330,18 +319,7 @@ namespace GameRPG.ViewModel
             CurrentNorthSouth++;
 
             UpdateMapLocation();
-
-            if(CurrentNorthSouth == maxX)
-            {
-                NorthButtonEnabled = false;
-            }
-            else
-            {
-                NorthButtonEnabled = true;
-            }
-
-            SouthButtonEnabled = true;
-
+            UpdateDirectionalButtons();
             TestingFight();
             TestingActivatingSecondQuest();
         }
@@ -351,18 +329,7 @@ namespace GameRPG.ViewModel
             CurrentEastWest++;
 
             UpdateMapLocation();
-
-            if(CurrentEastWest == maxY)
-            {
-                EastButtonEnabled = false;
-            }
-            else
-            {
-                EastButtonEnabled = true;
-            }
-
-            WestButtonEnabled = true;
-
+            UpdateDirectionalButtons();
             TestingFight();
             TestingActivatingSecondQuest();
         }
@@ -372,18 +339,7 @@ namespace GameRPG.ViewModel
             CurrentNorthSouth--;
 
             UpdateMapLocation();
-
-            if (CurrentNorthSouth == minX)
-            {
-                SouthButtonEnabled = false;
-            }
-            else
-            {
-                SouthButtonEnabled = true;
-            }
-
-            NorthButtonEnabled = true;
-
+            UpdateDirectionalButtons();
             TestingFight();
             TestingActivatingSecondQuest();
         }
@@ -393,8 +349,46 @@ namespace GameRPG.ViewModel
             CurrentEastWest--;
 
             UpdateMapLocation();
+            UpdateDirectionalButtons();
+            TestingFight();
+            TestingActivatingSecondQuest();
+        }
 
-            if (CurrentEastWest == minY)
+        public void UpdateDirectionalButtons()
+        {
+            int mapListIndexNorthMax = locationLists.FindIndex(i => i.CoordinateY == CurrentNorthSouth + 1 && i.CoordinateX == CurrentEastWest);
+            int mapListIndexEastMax = locationLists.FindIndex(i => i.CoordinateY == CurrentNorthSouth && i.CoordinateX == CurrentEastWest + 1);
+            int mapListIndexSouthMax = locationLists.FindIndex(i => i.CoordinateY == CurrentNorthSouth - 1 && i.CoordinateX == CurrentEastWest);
+            int mapListIndexWestMax = locationLists.FindIndex(i => i.CoordinateY == CurrentNorthSouth && i.CoordinateX == CurrentEastWest - 1);
+
+            if (mapListIndexNorthMax == -1)
+            {
+                NorthButtonEnabled = false;
+            }
+            else
+            {
+                NorthButtonEnabled = true;
+            }
+
+            if (mapListIndexEastMax == -1)
+            {
+                EastButtonEnabled = false;
+            }
+            else
+            {
+                EastButtonEnabled = true;
+            }
+
+            if (mapListIndexSouthMax == -1)
+            {
+                SouthButtonEnabled = false;
+            }
+            else
+            {
+                SouthButtonEnabled = true;
+            }
+
+            if (mapListIndexWestMax == -1)
             {
                 WestButtonEnabled = false;
             }
@@ -402,11 +396,6 @@ namespace GameRPG.ViewModel
             {
                 WestButtonEnabled = true;
             }
-
-            EastButtonEnabled = true;
-
-            TestingFight();
-            TestingActivatingSecondQuest();
         }
 
         private void EventLocatorButton()
@@ -457,29 +446,6 @@ namespace GameRPG.ViewModel
             AddActiveQuests();
         }
 
-        public void LocationButtonDefaults()
-        {
-            if (CurrentNorthSouth == 0)
-            {
-                NorthButtonEnabled = true;
-            }
-
-            if (CurrentNorthSouth == 0)
-            {
-                EastButtonEnabled = true;
-            }
-
-            if (CurrentNorthSouth == 0)
-            {
-                SouthButtonEnabled = false;
-            }
-
-            if (CurrentEastWest == 0)
-            {
-                WestButtonEnabled = false;
-            }
-        }
-
         public void AddEvents()
         {
             foreach (var events in locationLists)
@@ -495,9 +461,9 @@ namespace GameRPG.ViewModel
         {
             foreach (var quest in questList)
             {
-                if (!QuestTitles.Contains(quest.Title) && quest.IsActive)
+                if (!Quest.Contains(quest) && (quest.IsActive))
                 {
-                    QuestTitles.Add(quest.Title);
+                    Quest.Add(quest);
                 }
             }
         }
@@ -529,10 +495,12 @@ namespace GameRPG.ViewModel
         {
             if (mapListIndex == locationLists.FindIndex(ml => ml.LocationEvent.Contains("Quest #1")))
             {
+                foreach (var quest in Quest.Where(x => x.Title == "1. Search the map"))
+                {
+                    quest.IsComplete = true;
+                }
+
                 questList[1].IsActive = true;
-              
-                // QuestTitles.Remove(QuestTitles[0]);
-                // QuestTitles.Insert(0, "Complete!");
 
                 AddActiveQuests();
             }
