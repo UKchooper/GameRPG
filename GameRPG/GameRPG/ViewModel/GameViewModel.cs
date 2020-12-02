@@ -1,5 +1,6 @@
 ﻿using Prism.Commands;
 using Prism.Mvvm;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -33,7 +34,7 @@ namespace GameRPG.ViewModel
         int mapListIndex;
         int selectedEventIndex;
 
-        public List<Location> locationLists;
+        public List<Location> locationLists = new List<Location>();
         public List<Quest> questList;
         // Unused atm
         //List<Enemy> enemyList = new List<Enemy>();
@@ -46,7 +47,10 @@ namespace GameRPG.ViewModel
             this.WestButtonCommand = new DelegateCommand(this.WestButton);
             this.EventLocatorCommand = new DelegateCommand(this.EventLocatorButton);
 
-            AddLocations();
+            //AddLocations();
+
+            RandomLocations();
+
             UpdateDirectionalButtons();
             UpdateMapLocation();
             AddQuests();
@@ -509,6 +513,94 @@ namespace GameRPG.ViewModel
         public void AddEnemies()
         {
            // enemyList.Add(new Enemy())
+        }
+
+        public void RandomLocations()
+        {
+            locationLists.Add(new Location(0, 0, "Starting location - Grassland #1", "Grass", ""));
+
+            Random random = new Random();
+
+            int index = 2;
+
+            HashSet<int> coordYList = new HashSet<int>();
+            HashSet<int> coordXList = new HashSet<int>();
+
+            do
+            {
+                foreach (var coord in locationLists)
+                {
+                    coordYList.Add(coord.CoordinateY);
+                }
+
+                foreach (var coord in locationLists)
+                {
+                    coordXList.Add(coord.CoordinateX);
+                }
+
+                int randomY = random.Next(coordYList.Min() - 1, coordYList.Max() + 1);
+                int randomX = random.Next(coordXList.Min() - 1, coordXList.Max() + 1);
+
+                int randomNum = random.Next(0, 4);
+
+                if (randomNum == 0)
+                {
+                    int temp = randomY + 1;
+
+                    if(!(locationLists.FindIndex(i => i.CoordinateY == randomY && i.CoordinateX == randomX) == -1))
+                    {
+                        if (locationLists.FindIndex(i => i.CoordinateY == temp && i.CoordinateX == randomX) == -1)
+                        {
+                            locationLists.Add(new Location(temp, randomX, $"Random location #{index}", "Grass", ""));
+                            index++;
+                        }
+                        
+                    }
+                }
+
+                if (randomNum == 1)
+                {
+                    int temp = randomX + 1;
+
+                    if(!(locationLists.FindIndex(i => i.CoordinateY == randomY && i.CoordinateX == randomX) == -1))
+                    {
+                        if(locationLists.FindIndex(i => i.CoordinateY == randomY && i.CoordinateX == temp) == -1)
+                        {
+                            locationLists.Add(new Location(randomY, temp, $"Random location #{index}", "Grass", ""));
+                            index++;
+                        }
+                    }
+                }
+                
+                if (randomNum == 2)
+                {
+                    int temp = randomY - 1;
+
+                    if(!(locationLists.FindIndex(i => i.CoordinateY == randomY && i.CoordinateX == randomX) == -1))
+                    {
+                        if(locationLists.FindIndex(i => i.CoordinateY == temp && i.CoordinateX == randomX) == -1)
+                        {
+                            locationLists.Add(new Location(temp, randomX, $"Random location #{index}", "Grass", ""));
+                            index++;
+                        }
+                    }
+                }
+                
+                if (randomNum == 3)
+                {
+                    int temp = randomX - 1;
+
+                    if(!(locationLists.FindIndex(i => i.CoordinateY == randomY && i.CoordinateX == randomX) == -1))
+                    {
+                        if (!(locationLists.FindIndex(i => i.CoordinateY == randomY && i.CoordinateX == temp) == -1))
+                        {
+                            locationLists.Add(new Location(randomY, temp, $"Random location #{index}", "Grass", ""));
+                            index++;
+                        }
+                    }
+                }
+            }
+            while (locationLists.Count < 10);
         }
     }
 }
