@@ -1,8 +1,10 @@
 ﻿using Prism.Commands;
 using Prism.Mvvm;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -47,6 +49,7 @@ namespace GameRPG.ViewModel
             this.WestButtonCommand = new DelegateCommand(this.WestButton);
             this.EventLocatorCommand = new DelegateCommand(this.EventLocatorButton);
 
+            // this adds specific locations
             //AddLocations();
 
             RandomLocations();
@@ -488,7 +491,7 @@ namespace GameRPG.ViewModel
 
         public void TestingFight()
         {
-            if (locationLists[mapListIndex].LocationEvent == "Fight #1" || locationLists[mapListIndex].LocationEvent == "Fight #2")
+            if (locationLists[mapListIndex].LocationEvent.Contains("Fight"))
             {
                 HP--;
                 XP += 5;
@@ -517,7 +520,11 @@ namespace GameRPG.ViewModel
 
         public void RandomLocations()
         {
-            locationLists.Add(new Location(0, 0, "Starting location - Grassland #1", "Grass", ""));
+            locationLists.Add(new Location(0, 0, "Starting location - Grassland #1", "Grass", "Home"));
+
+            List<string> images = new List<string> { "Grass", "Ocean", "Sand" };
+
+            List<string> events = new List<string> { "Fight #1", "Fight #2", "Fight #3", "Shop", "Quest #1", "Quest #2", string.Empty, string.Empty, string.Empty };
 
             Random random = new Random();
 
@@ -543,6 +550,10 @@ namespace GameRPG.ViewModel
 
                 int randomNum = random.Next(0, 4);
 
+                int randomImage = random.Next(0, images.Count());
+
+                int randomQuest = random.Next(0, events.Count());
+
                 if (randomNum == 0)
                 {
                     int temp = randomY + 1;
@@ -551,8 +562,9 @@ namespace GameRPG.ViewModel
                     {
                         if (locationLists.FindIndex(i => i.CoordinateY == temp && i.CoordinateX == randomX) == -1)
                         {
-                            locationLists.Add(new Location(temp, randomX, $"Random location #{index}", "Grass", ""));
+                            locationLists.Add(new Location(temp, randomX, $"Random { images[randomImage] } location #{index}", $"{images[randomImage]}", $"{events[randomQuest]}"));
                             index++;
+                            events.RemoveAt(randomQuest);
                         }
                         
                     }
@@ -566,8 +578,9 @@ namespace GameRPG.ViewModel
                     {
                         if(locationLists.FindIndex(i => i.CoordinateY == randomY && i.CoordinateX == temp) == -1)
                         {
-                            locationLists.Add(new Location(randomY, temp, $"Random location #{index}", "Grass", ""));
+                            locationLists.Add(new Location(randomY, temp, $"Random { images[randomImage] } location #{index}", $"{images[randomImage]}", $"{events[randomQuest]}"));
                             index++;
+                            events.RemoveAt(randomQuest);
                         }
                     }
                 }
@@ -580,8 +593,9 @@ namespace GameRPG.ViewModel
                     {
                         if(locationLists.FindIndex(i => i.CoordinateY == temp && i.CoordinateX == randomX) == -1)
                         {
-                            locationLists.Add(new Location(temp, randomX, $"Random location #{index}", "Grass", ""));
+                            locationLists.Add(new Location(temp, randomX, $"Random { images[randomImage] } location #{index}", $"{images[randomImage]}", $"{events[randomQuest]}"));
                             index++;
+                            events.RemoveAt(randomQuest);
                         }
                     }
                 }
@@ -592,13 +606,16 @@ namespace GameRPG.ViewModel
 
                     if(!(locationLists.FindIndex(i => i.CoordinateY == randomY && i.CoordinateX == randomX) == -1))
                     {
-                        if (!(locationLists.FindIndex(i => i.CoordinateY == randomY && i.CoordinateX == temp) == -1))
+                        if(locationLists.FindIndex(i => i.CoordinateY == randomY && i.CoordinateX == temp) == -1)
                         {
-                            locationLists.Add(new Location(randomY, temp, $"Random location #{index}", "Grass", ""));
+                            locationLists.Add(new Location(randomY, temp, $"Random { images[randomImage] } location #{index}", $"{images[randomImage]}", $"{events[randomQuest]}"));
                             index++;
+                            events.RemoveAt(randomQuest);
                         }
                     }
                 }
+
+                
             }
             while (locationLists.Count < 10);
         }
