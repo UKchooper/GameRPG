@@ -33,11 +33,15 @@ namespace GameRPG.ViewModel
         private bool southButtonEnabled;
         private bool westButtonEnabled;
 
+        private int selectedCharacterIndex;
+        private List<Character> characters = CharacterSelectionViewModel.characters;
+
         int mapListIndex;
         int selectedEventIndex;
 
         public List<Location> locationLists = new List<Location>();
         public List<Quest> questList;
+
         // Unused atm
         //List<Enemy> enemyList = new List<Enemy>();
 
@@ -53,7 +57,6 @@ namespace GameRPG.ViewModel
             //AddLocations();
 
             RandomLocations();
-
             UpdateDirectionalButtons();
             UpdateMapLocation();
             AddQuests();
@@ -70,6 +73,19 @@ namespace GameRPG.ViewModel
         public ICommand WestButtonCommand { get; set; }
 
         public ICommand EventLocatorCommand { get; set; }
+
+        public int SelectedCharacterIndex
+        {
+            get
+            {
+                return selectedCharacterIndex;
+            }
+            set
+            {
+                selectedCharacterIndex = value;
+                RaisePropertyChanged(nameof(this.SelectedCharacterIndex));
+            }
+        }
 
         public string Name
         {
@@ -479,11 +495,11 @@ namespace GameRPG.ViewModel
 
         public void FakePerson()
         {
-            Name = "Carl";
-            Type = "Warrior";
-            Level = 1;
+            Name = characters[selectedCharacterIndex].Name;
+            Type = characters[selectedCharacterIndex].Type;
+            Level = characters[selectedCharacterIndex].Level;
             XP = 0;
-            HP = 100;
+            HP = characters[selectedCharacterIndex].Hp;
             Strength = 3;
             Intelligence = 4;
             Agility = 5;

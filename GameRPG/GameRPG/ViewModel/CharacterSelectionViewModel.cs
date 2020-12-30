@@ -21,9 +21,9 @@ namespace GameRPG.ViewModel
         private int defence;
         private string image;
 
-        private int selectedCharacterIndex;
+        public static int selectedCharacterIndex;
 
-        private List<Character> characters;
+        public static List<Character> characters;
         
         public CharacterSelectionViewModel(MainWindowViewModel main)
         {
