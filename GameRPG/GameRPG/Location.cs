@@ -11,14 +11,16 @@ namespace GameRPG
         public string Title { get; set; }
         public string Description { get; set; }
         public string LocationEvent { get; set; }
+        public bool Hidden { get; set; }
 
-        public Location(int coordinateY, int coordinateX, string title, string description, string locationEvent)
+        public Location(int coordinateY, int coordinateX, string title, string description, string locationEvent, bool hidden)
         {
             CoordinateY = coordinateY;
             CoordinateX = coordinateX;
             Title = title;
             Description = description;
             LocationEvent = locationEvent;
+            Hidden = hidden;
         }
     }
 }

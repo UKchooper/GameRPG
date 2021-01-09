@@ -57,11 +57,12 @@ namespace GameRPG
             string description = parts[2];
             int level = int.Parse(parts[3]);
             int hp = int.Parse(parts[4]);
-            int attack = int.Parse(parts[5]);
-            int defence = int.Parse(parts[6]);
-            string image = parts[7];
+            int strength = int.Parse(parts[5]);
+            int agility = int.Parse(parts[6]);
+            int intelligence = int.Parse(parts[7]);
+            string image = parts[8];
 
-             return new Character(name, type, description, level, hp, attack, defence, image);
+             return new Character(name, type, description, level, hp, strength, agility, intelligence, image);
         }
 
         public List<Enemy> ReadEnemies()
@@ -87,10 +88,11 @@ namespace GameRPG
             string description = parts[2];
             int level = int.Parse(parts[3]);
             int hp = int.Parse(parts[4]);
-            int attack = int.Parse(parts[5]);
-            int defence = int.Parse(parts[6]);
+            int strength = int.Parse(parts[5]);
+            int agility = int.Parse(parts[6]);
+            int intelligence = int.Parse(parts[7]);
 
-            return new Enemy(name, type, description, level, hp, attack, defence);
+            return new Enemy(name, type, description, level, hp, strength, agility, intelligence);
         }
 
         public List<Location> ReadLocations()
@@ -116,8 +118,9 @@ namespace GameRPG
             string description = parts[2];
             string type = parts[3];
             string locationEvent = parts[4];
+            bool hidden = bool.Parse(parts[5]);
 
-            return new Location(coordinateX, coordinateY, description, type, locationEvent);
+            return new Location(coordinateX, coordinateY, description, type, locationEvent, hidden);
         }
 
         public List<Quest> ReadQuests()

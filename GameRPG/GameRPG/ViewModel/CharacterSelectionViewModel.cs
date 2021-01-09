@@ -2,6 +2,7 @@
 using Prism.Mvvm;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 
 namespace GameRPG.ViewModel
@@ -16,9 +17,10 @@ namespace GameRPG.ViewModel
         private string type;
         private int level;
         private int hp;
-        private int attack;
         private string description;
-        private int defence;
+        private int strength;
+        private int agility;
+        private int intelligence;
         private string image;
 
         public static int selectedCharacterIndex;
@@ -96,29 +98,42 @@ namespace GameRPG.ViewModel
             }
         }
 
-        public int Attack
+        public int Strength
         {
             get
             {
-                return attack;
+                return strength;
             }
             set
             {
-                attack = value;
-                RaisePropertyChanged(nameof(Attack));
+                strength = value;
+                RaisePropertyChanged(nameof(Strength));
             }
         }
 
-        public int Defence
+        public int Agility
         {
             get
             {
-                return defence;
+                return agility;
             }
             set
             {
-                defence = value;
-                RaisePropertyChanged(nameof(Defence));
+                agility = value;
+                RaisePropertyChanged(nameof(Agility));
+            }
+        }
+
+        public int Intelligence
+        {
+            get
+            {
+                return intelligence;
+            }
+            set
+            {
+                intelligence = value;
+                RaisePropertyChanged(nameof(Intelligence));
             }
         }
 
@@ -170,15 +185,22 @@ namespace GameRPG.ViewModel
             Type = characters[SelectedCharacterIndex].Type;
             Level = characters[SelectedCharacterIndex].Level;
             HP = characters[SelectedCharacterIndex].Hp;
-            Attack = characters[SelectedCharacterIndex].Attack;
+            Strength = characters[SelectedCharacterIndex].Strength;
             Description = characters[SelectedCharacterIndex].Description;
-            Defence = characters[SelectedCharacterIndex].Defence;
+            Agility = characters[SelectedCharacterIndex].Agility;
+            Intelligence = characters[selectedCharacterIndex].Intelligence;
             Image = $"pack://application:,,,/{characters[selectedCharacterIndex].Image}";
          }
 
         private void PressConfirm()
         {
             this.main.SwitchToGameView();
+
+            string combineCharacterStats = $"{Name},{Type},{Description},{Level},{HP},{Strength},{Agility},{Intelligence},{Image}";
+
+            TxtWriter characterWriter = new TxtWriter(combineCharacterStats);
+
+            characterWriter.WriteCharacters();
         }
     }
 }

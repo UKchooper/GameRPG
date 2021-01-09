@@ -9,7 +9,10 @@
   <ItemGroup>
     <None Remove="Images\archer.png" />
     <None Remove="Images\knight.png" />
+    <None Remove="Images\locations\blocked.png" />
     <None Remove="Images\locations\grass.png" />
+    <None Remove="Images\locations\grassTopBlocked.png" />
+    <None Remove="Images\locations\hidden.png" />
     <None Remove="Images\locations\ocean.png" />
     <None Remove="Images\locations\sand.png" />
     <None Remove="Images\mage.png" />
@@ -27,7 +30,10 @@
     <Resource Include="Images\knight.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Images\locations\blocked.png" />
     <Resource Include="Images\locations\grass.png" />
+    <Resource Include="Images\locations\grassTopBlocked.png" />
+    <Resource Include="Images\locations\hidden.png" />
     <Resource Include="Images\locations\ocean.png" />
     <Resource Include="Images\locations\sand.png" />
     <Resource Include="Images\mage.png">

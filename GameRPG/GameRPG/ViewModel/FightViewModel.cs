@@ -12,9 +12,11 @@ namespace GameRPG.ViewModel
         private string type;
         private int level;
         private int hp;
-        private int attack;
+        private int strength;
+        private int agility;
+        private int intelligence;
         private string description;
-        private int defence;
+        
 
         private int randomEnemy;
 
@@ -79,29 +81,42 @@ namespace GameRPG.ViewModel
             }
         }
 
-        public int Attack
+        public int Strength
         {
             get
             {
-                return attack;
+                return strength;
             }
             set
             {
-                attack = value;
-                RaisePropertyChanged(nameof(Attack));
+                strength = value;
+                RaisePropertyChanged(nameof(Strength));
             }
         }
 
-        public int Defence
+        public int Agility
         {
             get
             {
-                return defence;
+                return agility;
             }
             set
             {
-                defence = value;
-                RaisePropertyChanged(nameof(Defence));
+                agility = value;
+                RaisePropertyChanged(nameof(Agility));
+            }
+        }
+
+        public int Intelligence
+        {
+            get
+            {
+                return intelligence;
+            }
+            set
+            {
+                intelligence = value;
+                RaisePropertyChanged(nameof(Intelligence));
             }
         }
 
@@ -128,8 +143,9 @@ namespace GameRPG.ViewModel
             Type = enemies[randomEnemy].Type;
             Level = enemies[randomEnemy].Level;
             HP = enemies[randomEnemy].Hp;
-            Attack = enemies[randomEnemy].Attack;
-            Defence = enemies[randomEnemy].Defence;
+            Strength = enemies[randomEnemy].Strength;
+            Agility = enemies[randomEnemy].Agility;
+            Intelligence = enemies[randomEnemy].Intelligence;
         }
     }
 }

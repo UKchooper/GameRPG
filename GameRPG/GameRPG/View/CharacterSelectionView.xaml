@@ -26,10 +26,12 @@
                     <TextBlock FontSize="15" Text="{Binding Level}"/>
                     <TextBlock FontSize="16" FontWeight="Bold" Text="HP:" />
                     <TextBlock FontSize="15" Text="{Binding HP}"/>
-                    <TextBlock FontSize="16" FontWeight="Bold" Text="Attack:" />
-                    <TextBlock FontSize="15" Text="{Binding Attack}" />
-                    <TextBlock FontSize="16" FontWeight="Bold" Text="Defence:" />
-                    <TextBlock FontSize="15" Text="{Binding Defence}" />
+                    <TextBlock FontSize="16" FontWeight="Bold" Text="Strength:" />
+                    <TextBlock FontSize="15" Text="{Binding Strength}" />
+                    <TextBlock FontSize="16" FontWeight="Bold" Text="Agility:" />
+                    <TextBlock FontSize="15" Text="{Binding Agility}" />
+                    <TextBlock FontSize="16" FontWeight="Bold" Text="Intelligence:" />
+                    <TextBlock FontSize="15" Text="{Binding Intelligence}" />
                 </StackPanel>
 
                 <ComboBox FontSize="16" Width="200" Height="30" Grid.Column="0" Grid.Row="1" ItemsSource="{Binding CharacterNames}" SelectedIndex="{Binding SelectedCharacterIndex}" />

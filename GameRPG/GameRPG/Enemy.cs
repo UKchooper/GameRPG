@@ -11,17 +11,19 @@ namespace GameRPG
         public string Type { get; set; }
         public int Level { get; set; }
         public int Hp { get; set; }
-        public int Attack { get; set; }
-        public int Defence { get; set; }
-        public Enemy(string name, string type, string description, int level, int hp, int attack, int defence)
+        public int Strength { get; set; }
+        public int Agility { get; set; }
+        public int Intelligence { get; set; }
+        public Enemy(string name, string type, string description, int level, int hp, int strength, int agility, int intelligence)
         {
             Name = name;
             Type = type;
             Description = description;
             Level = level;
             Hp = hp;
-            Attack = attack;
-            Defence = defence;
+            Strength = strength;
+            Agility = agility;
+            Intelligence = intelligence;
         }
     }
 }
