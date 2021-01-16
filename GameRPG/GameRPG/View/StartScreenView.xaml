@@ -19,8 +19,8 @@
         <TextBox Grid.Row="0" Grid.Column="0" Width="300" Height="50" Text="Welcome to this RPG type game. Just having fun trying different coding stuff out!"
                  TextWrapping="Wrap" TextAlignment="Center"/>
         <Button Content="New Game" Grid.Row="1" Grid.Column="0" Width="100" Height="30" Command="{Binding NewGameCommand}"/>
-        <Button Content="Load Game" Grid.Row="2" Grid.Column="0" Width="100" Height="30" Click="LoadGame_Click"/>
-        <Button Content="Settings" Grid.Row="3" Grid.Column="0" Width="100" Height="30" Click="Settings_Click"/>
+        <Button Content="Load Game" Grid.Row="2" Grid.Column="0" Width="100" Height="30" Command="{Binding LoadGameCommand}"/>
+        <Button Content="Settings" Grid.Row="3" Grid.Column="0" Width="100" Height="30" Command="{Binding SettingsCommand}"/>
     </Grid>
 </UserControl>
     

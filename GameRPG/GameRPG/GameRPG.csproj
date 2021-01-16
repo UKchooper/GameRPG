@@ -9,9 +9,23 @@
   <ItemGroup>
     <None Remove="Images\archer.png" />
     <None Remove="Images\knight.png" />
-    <None Remove="Images\locations\blocked.png" />
+    <None Remove="Images\locations\blockedbottom.png" />
+    <None Remove="Images\locations\blockedbottomleft.png" />
+    <None Remove="Images\locations\blockedbottomleftright.png" />
+    <None Remove="Images\locations\blockedbottomright.png" />
+    <None Remove="Images\locations\blockedleft.png" />
+    <None Remove="Images\locations\blockedlefttop.png" />
+    <None Remove="Images\locations\blockedlefttopbottom.png" />
+    <None Remove="Images\locations\blockedright.png" />
+    <None Remove="Images\locations\blockedrighttopbottom.png" />
+    <None Remove="Images\locations\blockedtop.png" />
+    <None Remove="Images\locations\blockedtopleft.png" />
+    <None Remove="Images\locations\blockedtopleftright.png" />
+    <None Remove="Images\locations\blockedtopright.png" />
+    <None Remove="Images\locations\currentgrass.png" />
+    <None Remove="Images\locations\currentocean.png" />
+    <None Remove="Images\locations\currentsand.png" />
     <None Remove="Images\locations\grass.png" />
-    <None Remove="Images\locations\grassTopBlocked.png" />
     <None Remove="Images\locations\hidden.png" />
     <None Remove="Images\locations\ocean.png" />
     <None Remove="Images\locations\sand.png" />
@@ -30,9 +44,23 @@
     <Resource Include="Images\knight.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Images\locations\blocked.png" />
+    <Resource Include="Images\locations\blockedbottom.png" />
+    <Resource Include="Images\locations\blockedbottomleft.png" />
+    <Resource Include="Images\locations\blockedbottomleftright.png" />
+    <Resource Include="Images\locations\blockedbottomright.png" />
+    <Resource Include="Images\locations\blockedleft.png" />
+    <Resource Include="Images\locations\blockedlefttop.png" />
+    <Resource Include="Images\locations\blockedlefttopbottom.png" />
+    <Resource Include="Images\locations\blockedright.png" />
+    <Resource Include="Images\locations\blockedrighttopbottom.png" />
+    <Resource Include="Images\locations\blockedtop.png" />
+    <Resource Include="Images\locations\blockedtopleft.png" />
+    <Resource Include="Images\locations\blockedtopleftright.png" />
+    <Resource Include="Images\locations\blockedtopright.png" />
+    <Resource Include="Images\locations\currentgrass.png" />
+    <Resource Include="Images\locations\currentocean.png" />
+    <Resource Include="Images\locations\currentsand.png" />
     <Resource Include="Images\locations\grass.png" />
-    <Resource Include="Images\locations\grassTopBlocked.png" />
     <Resource Include="Images\locations\hidden.png" />
     <Resource Include="Images\locations\ocean.png" />
     <Resource Include="Images\locations\sand.png" />

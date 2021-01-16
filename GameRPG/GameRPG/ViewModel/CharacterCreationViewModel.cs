@@ -125,7 +125,7 @@ namespace GameRPG.ViewModel
             requiredInfo = $"{Name},{Type},{Level},{HP},{Attack},{Description},{Defence}";
 
             using (System.IO.StreamWriter file =
-            new System.IO.StreamWriter(@"C:\Users\carl.hooper\Desktop\GameoStuffo\TextFiles\testing.txt", true))
+            new System.IO.StreamWriter(@"C:\Users\carl.hooper\Desktop\GameoStuffo\TextFiles\SaveCharacter.txt", true))
             {
                 file.WriteLine(requiredInfo);
             }

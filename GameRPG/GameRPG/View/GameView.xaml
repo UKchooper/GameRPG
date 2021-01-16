@@ -13,9 +13,9 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="120"/>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="0.75*"/>
+            <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
 
         <!-- Left column-->
@@ -96,53 +96,49 @@
 
         <!-- Right column -->
 
-        <StackPanel Grid.Column="2">
-            <Label Content="Map:" FontSize="15" />
-            <Grid Margin="0,0,2,0" HorizontalAlignment="Center">
+            <Grid Grid.Column="2" Margin="0,0,2,0" HorizontalAlignment="Center" VerticalAlignment="Center" >
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="40"/>
-                    <ColumnDefinition Width="40"/>
-                    <ColumnDefinition Width="40"/>
-                    <ColumnDefinition Width="40"/>
-                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition Height="40"/>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
 
-                <Image Grid.Column="0" Grid.Row="0" Source="{Binding FullMapImage1}" Stretch="Fill" />
-                <Image Grid.Column="1" Grid.Row="0" Source="{Binding FullMapImage2}" Stretch="Fill" />
-                <Image Grid.Column="2" Grid.Row="0" Source="{Binding FullMapImage3}" Stretch="Fill" />
-                <Image Grid.Column="3" Grid.Row="0" Source="{Binding FullMapImage4}" Stretch="Fill" />
-                <Image Grid.Column="4" Grid.Row="0" Source="{Binding FullMapImage5}" Stretch="Fill" />
-                <Image Grid.Column="0" Grid.Row="1" Source="{Binding FullMapImage6}" Stretch="Fill" />
-                <Image Grid.Column="1" Grid.Row="1" Source="{Binding FullMapImage7}" Stretch="Fill" />
-                <Image Grid.Column="2" Grid.Row="1" Source="{Binding FullMapImage8}" Stretch="Fill" />
-                <Image Grid.Column="3" Grid.Row="1" Source="{Binding FullMapImage9}" Stretch="Fill" />
-                <Image Grid.Column="4" Grid.Row="1" Source="{Binding FullMapImage10}" Stretch="Fill" />
-                <Image Grid.Column="0" Grid.Row="2" Source="{Binding FullMapImage11}" Stretch="Fill" />
-                <Image Grid.Column="1" Grid.Row="2" Source="{Binding FullMapImage12}" Stretch="Fill" />
-                <Image Grid.Column="2" Grid.Row="2" Source="{Binding FullMapImage13}" Stretch="Fill" />
-                <Image Grid.Column="3" Grid.Row="2" Source="{Binding FullMapImage14}" Stretch="Fill" />
-                <Image Grid.Column="4" Grid.Row="2" Source="{Binding FullMapImage15}" Stretch="Fill" />
-                <Image Grid.Column="0" Grid.Row="3" Source="{Binding FullMapImage16}" Stretch="Fill" />
-                <Image Grid.Column="1" Grid.Row="3" Source="{Binding FullMapImage17}" Stretch="Fill" />
-                <Image Grid.Column="2" Grid.Row="3" Source="{Binding FullMapImage18}" Stretch="Fill" />
-                <Image Grid.Column="3" Grid.Row="3" Source="{Binding FullMapImage19}" Stretch="Fill" />
-                <Image Grid.Column="4" Grid.Row="3" Source="{Binding FullMapImage20}" Stretch="Fill" />
-                <Image Grid.Column="0" Grid.Row="4" Source="{Binding FullMapImage21}" Stretch="Fill" />
-                <Image Grid.Column="1" Grid.Row="4" Source="{Binding FullMapImage22}" Stretch="Fill" />
-                <Image Grid.Column="2" Grid.Row="4" Source="{Binding FullMapImage23}" Stretch="Fill" />
-                <Image Grid.Column="3" Grid.Row="4" Source="{Binding FullMapImage24}" Stretch="Fill" />
-                <Image Grid.Column="4" Grid.Row="4" Source="{Binding FullMapImage25}" Stretch="Fill" />
+                <Image Grid.Column="0" Grid.Row="0" Source="{Binding FullMapImage1}" />
+                <Image Grid.Column="1" Grid.Row="0" Source="{Binding FullMapImage2}" />
+                <Image Grid.Column="2" Grid.Row="0" Source="{Binding FullMapImage3}" />
+                <Image Grid.Column="3" Grid.Row="0" Source="{Binding FullMapImage4}" />
+                <Image Grid.Column="4" Grid.Row="0" Source="{Binding FullMapImage5}" />
+                <Image Grid.Column="0" Grid.Row="1" Source="{Binding FullMapImage6}" />
+                <Image Grid.Column="1" Grid.Row="1" Source="{Binding FullMapImage7}" />
+                <Image Grid.Column="2" Grid.Row="1" Source="{Binding FullMapImage8}" />
+                <Image Grid.Column="3" Grid.Row="1" Source="{Binding FullMapImage9}" />
+                <Image Grid.Column="4" Grid.Row="1" Source="{Binding FullMapImage10}" />
+                <Image Grid.Column="0" Grid.Row="2" Source="{Binding FullMapImage11}" />
+                <Image Grid.Column="1" Grid.Row="2" Source="{Binding FullMapImage12}" />
+                <Image Grid.Column="2" Grid.Row="2" Source="{Binding FullMapImage13}" />
+                <Image Grid.Column="3" Grid.Row="2" Source="{Binding FullMapImage14}" />
+                <Image Grid.Column="4" Grid.Row="2" Source="{Binding FullMapImage15}" />
+                <Image Grid.Column="0" Grid.Row="3" Source="{Binding FullMapImage16}" />
+                <Image Grid.Column="1" Grid.Row="3" Source="{Binding FullMapImage17}" />
+                <Image Grid.Column="2" Grid.Row="3" Source="{Binding FullMapImage18}" />
+                <Image Grid.Column="3" Grid.Row="3" Source="{Binding FullMapImage19}" />
+                <Image Grid.Column="4" Grid.Row="3" Source="{Binding FullMapImage20}" />
+                <Image Grid.Column="0" Grid.Row="4" Source="{Binding FullMapImage21}" />
+                <Image Grid.Column="1" Grid.Row="4" Source="{Binding FullMapImage22}" />
+                <Image Grid.Column="2" Grid.Row="4" Source="{Binding FullMapImage23}" />
+                <Image Grid.Column="3" Grid.Row="4" Source="{Binding FullMapImage24}" />
+                <Image Grid.Column="4" Grid.Row="4" Source="{Binding FullMapImage25}" />
             </Grid>
-            
-        </StackPanel>
-        <Grid Grid.Column="2" Grid.Row="1">
+            <Grid Grid.Column="2" Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition />
@@ -164,7 +160,7 @@
             </StackPanel>
         </Grid>
 
-        <Grid Grid.Column="2" Grid.Row="2">
+        <Grid Grid.Column="2" Grid.Row="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>

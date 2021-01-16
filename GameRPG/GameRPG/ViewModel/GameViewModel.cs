@@ -1,10 +1,8 @@
 ﻿using Prism.Commands;
 using Prism.Mvvm;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -38,6 +36,7 @@ namespace GameRPG.ViewModel
         private List<Character> characters = CharacterSelectionViewModel.characters;
 
         int mapListIndex;
+        int previousMapListIndex;
         int selectedEventIndex;
 
         public List<Location> locationLists = new List<Location>();
@@ -47,7 +46,7 @@ namespace GameRPG.ViewModel
         // Unused atm
         //List<Enemy> enemyList = new List<Enemy>();
 
-        public GameViewModel()
+        public GameViewModel(MainWindowViewModel main)
         {
             this.NorthButtonCommand = new DelegateCommand(this.NorthButton);
             this.EastButtonCommand = new DelegateCommand(this.EastButton);
@@ -64,8 +63,9 @@ namespace GameRPG.ViewModel
             UpdateMapLocation();
             AddQuests();
             AddEvents();
-            FakePerson();
-            AddFullMap();
+            //FakePerson();
+            UpdateBlockedMapLocations();
+            UpdateMap();
         }
 
         public ICommand NorthButtonCommand { get; set; }
@@ -337,11 +337,15 @@ namespace GameRPG.ViewModel
 
             TxtReader characterReader = new TxtReader(characterFile);
             characterInformation = characterReader.ReadCharacters();
+
+            FakePerson();
         }
 
         public void UpdateMapLocation()
         {
             mapListIndex = locationLists.FindIndex(i => i.CoordinateY == CurrentNorthSouth && i.CoordinateX == CurrentEastWest);
+
+            //previousMapListIndex;
 
             MapImage = $"pack://application:,,,/Images/locations/{locationLists[mapListIndex].Description.ToLower()}.png";
             MapTitle = locationLists[mapListIndex].Title;
@@ -349,20 +353,182 @@ namespace GameRPG.ViewModel
             MapDescription = locationLists[mapListIndex].Description;
         }
 
-        //public void UpdateBlockedMapLocations()
-        //{
-        //    mapListIndex = locationLists.FindIndex(i => i.CoordinateY == CurrentNorthSouth && i.CoordinateX == CurrentEastWest);
+        public void UpdateBlockedMapLocations()
+        {
+            mapListIndex = locationLists.FindIndex(i => i.CoordinateY == CurrentNorthSouth && i.CoordinateX == CurrentEastWest);
 
+            int NorthIndex = locationLists.FindIndex(i => i.CoordinateY == locationLists[mapListIndex].CoordinateY + 1 && i.CoordinateX == locationLists[mapListIndex].CoordinateX);
 
+            if (NorthIndex != -1 && locationLists[NorthIndex].Description == "Hidden")
+            {
+                locationLists[NorthIndex].Description = "blockedtop";
+            }
+            else if (NorthIndex != -1 && locationLists[NorthIndex].Description.Contains("block"))
+            {
+                int NorthEast = locationLists.FindIndex(i => i.CoordinateY == locationLists[NorthIndex].CoordinateY && i.CoordinateX == locationLists[NorthIndex].CoordinateX + 1);
+                int NorthWest = locationLists.FindIndex(i => i.CoordinateY == locationLists[NorthIndex].CoordinateY && i.CoordinateX == locationLists[NorthIndex].CoordinateX - 1);
 
-        //    int NorthIndex = locationLists.FindIndex(i => i.CoordinateY + 1 == i.CoordinateY && i.CoordinateX == i.CoordinateX);
-        //    // Check North
-        //    if (NorthIndex == -1)
-        //    {
-        //        locationLists[NorthIndex].Description = $"pack://application:,,,/Images/locations/blocked.png";
-        //    }
+                if (locationLists[NorthIndex].Description == "blockedtop")
+                {
+                    locationLists[NorthIndex].Description = "blockedtop";
+                }
+                else if (locationLists[NorthIndex].Description == "blockedright")
+                {
+                    locationLists[NorthIndex].Description = "blockedtopright";
+                }
+                else if (locationLists[NorthIndex].Description == "blockedleft")
+                {
+                    locationLists[NorthIndex].Description = "blockedtopleft";
+                }
 
-        //}
+                // working I think, just need to test it properly
+                //int NorthNorthIndex = locationLists.FindIndex(i => i.CoordinateY == locationLists[mapListIndex].CoordinateY + 2 && i.CoordinateX == locationLists[mapListIndex].CoordinateX);
+
+                //if (NorthIndex == -1 || (locationLists[NorthIndex].Description == "blockedlefttop"))
+                //{
+                //    if (NorthNorthIndex == -1 || !locationLists[NorthNorthIndex].Description.Contains("blocked") && !locationLists[NorthNorthIndex].Description.Contains("Hidden"))
+                //    {
+                //        locationLists[NorthIndex].Description = "blockedtopleftright";
+                //    }
+                //}
+                //else if (NorthIndex == -1 || (locationLists[NorthIndex].Description == "blockedtopright"))
+                //{
+                //    if (NorthNorthIndex == -1 || !locationLists[NorthNorthIndex].Description.Contains("blocked") && !locationLists[NorthNorthIndex].Description.Contains("Hidden"))
+                //    {
+                //        locationLists[NorthIndex].Description = "blockedtopleftright";
+                //    }
+                //}
+            }
+
+            int EastIndex = locationLists.FindIndex(i => i.CoordinateY == locationLists[mapListIndex].CoordinateY && i.CoordinateX == locationLists[mapListIndex].CoordinateX + 1);
+
+            if (EastIndex != -1 && locationLists[EastIndex].Description == "Hidden")
+            {
+                locationLists[EastIndex].Description = "blockedright";
+            }
+            else if (EastIndex != -1 && locationLists[EastIndex].Description.Contains("block"))
+            {
+                int EastNorth = locationLists.FindIndex(i => i.CoordinateY == locationLists[EastIndex].CoordinateY + 1 && i.CoordinateX == locationLists[EastIndex].CoordinateX);
+                int EastSouth = locationLists.FindIndex(i => i.CoordinateY == locationLists[EastIndex].CoordinateY - 1 && i.CoordinateX == locationLists[EastIndex].CoordinateX);
+
+                if(locationLists[EastIndex].Description == "blockedright")
+                {
+                    locationLists[EastIndex].Description = "blockedright";
+                }
+                else if (locationLists[EastIndex].Description == "blockedtop")
+                {
+                    locationLists[EastIndex].Description = "blockedtopright";
+                }
+                else if (locationLists[EastIndex].Description == "blockedbottom")
+                {
+                    locationLists[EastIndex].Description = "blockedbottomright";
+                }
+
+                //int EastEastIndex = locationLists.FindIndex(i => i.CoordinateY == locationLists[mapListIndex].CoordinateY && i.CoordinateX == locationLists[mapListIndex].CoordinateX + 2);
+
+                //if (EastIndex == -1 || (locationLists[EastIndex].Description == "blockedtopright"))
+                //{
+                //    if (EastEastIndex == -1 || !locationLists[EastEastIndex].Description.Contains("blocked") && !locationLists[EastEastIndex].Description.Contains("Hidden"))
+                //    {
+                //        locationLists[EastIndex].Description = "blockedlefttopbottom";
+                //    }
+                //}
+                //else if (EastIndex == -1 || (locationLists[EastIndex].Description == "blockedbottomright"))
+                //{
+                //    if (EastEastIndex == -1 || !locationLists[EastEastIndex].Description.Contains("blocked") && !locationLists[EastEastIndex].Description.Contains("Hidden"))
+                //    {
+                //        locationLists[EastIndex].Description = "blockedlefttopbottom";
+                //    }
+                //}
+            }
+
+            int SouthIndex = locationLists.FindIndex(i => i.CoordinateY == locationLists[mapListIndex].CoordinateY - 1 && i.CoordinateX == locationLists[mapListIndex].CoordinateX);
+
+            if (SouthIndex != -1 && locationLists[SouthIndex].Description == "Hidden")
+            {
+                locationLists[SouthIndex].Description = "blockedbottom";
+            }
+            else if (SouthIndex != -1 && locationLists[SouthIndex].Description.Contains("block"))
+            {
+                //int SouthEast = locationLists.FindIndex(i => i.CoordinateY == locationLists[SouthIndex].CoordinateY && i.CoordinateX == locationLists[SouthIndex].CoordinateX + 1);
+                //int SouthWest = locationLists.FindIndex(i => i.CoordinateY == locationLists[SouthIndex].CoordinateY && i.CoordinateX == locationLists[SouthIndex].CoordinateX - 1);
+
+                switch (locationLists[SouthIndex].Description)
+                {
+                    case "blockedbottom":
+                        locationLists[SouthIndex].Description = "blockedbottom";
+                        break;
+                    case "blockedright":
+                        locationLists[SouthIndex].Description = "blockedbottomright";
+                        break;
+                    case "blockedleft":
+                        locationLists[SouthIndex].Description = "blockedbottomleft";
+                        break;
+
+                    default:
+                        break;
+                }
+
+                //int SouthSouthIndex = locationLists.FindIndex(i => i.CoordinateY == locationLists[mapListIndex].CoordinateY - 2 && i.CoordinateX == locationLists[mapListIndex].CoordinateX);
+
+                //if (SouthIndex == -1 || (locationLists[SouthIndex].Description == "blockedbottomleft"))
+                //{
+                //    if (SouthSouthIndex == -1 || !locationLists[SouthSouthIndex].Description.Contains("blocked") && !locationLists[SouthSouthIndex].Description.Contains("Hidden"))
+                //    {
+                //        locationLists[SouthIndex].Description = "blockedbottomleftright";
+                //    }
+                //}
+                //else if (SouthIndex == -1 || (locationLists[SouthIndex].Description == "blockedbottomright"))
+                //{
+                //    if (SouthSouthIndex == -1 || !locationLists[SouthSouthIndex].Description.Contains("blocked") && !locationLists[SouthSouthIndex].Description.Contains("Hidden"))
+                //    {
+                //        locationLists[SouthIndex].Description = "blockedbottomleftright";
+                //    }
+                //}
+            }
+
+            int WestIndex = locationLists.FindIndex(i => i.CoordinateY == locationLists[mapListIndex].CoordinateY && i.CoordinateX == locationLists[mapListIndex].CoordinateX - 1);
+
+            if (WestIndex != -1 && locationLists[WestIndex].Description == "Hidden")
+            {
+                locationLists[WestIndex].Description = "blockedleft";
+            }
+            else if (WestIndex != -1 && locationLists[WestIndex].Description.Contains("block"))
+            {
+                int WestNorth = locationLists.FindIndex(i => i.CoordinateY == locationLists[WestIndex].CoordinateY + 1 && i.CoordinateX == locationLists[WestIndex].CoordinateX);
+                int WestSouth = locationLists.FindIndex(i => i.CoordinateY == locationLists[WestIndex].CoordinateY - 1 && i.CoordinateX == locationLists[WestIndex].CoordinateX);
+
+                if (locationLists[WestIndex].Description == "blockedleft")
+                {
+                    locationLists[WestIndex].Description = "blockedleft";
+                }
+                else if (locationLists[WestIndex].Description == "blockedtop")
+                {
+                    locationLists[WestIndex].Description = "blockedtopleft";
+                }
+                else if (locationLists[WestIndex].Description == "blockedbottom")
+                {
+                    locationLists[WestIndex].Description = "blockedbottomleft";
+                }
+
+                //int WestWestIndex = locationLists.FindIndex(i => i.CoordinateY == locationLists[mapListIndex].CoordinateY && i.CoordinateX == locationLists[mapListIndex].CoordinateX - 1);
+
+                //if (WestIndex == -1 || (locationLists[WestIndex].Description == "blockedtopleft"))
+                //{
+                //    if (WestWestIndex == -1 || !locationLists[WestWestIndex].Description.Contains("blocked") && !locationLists[WestWestIndex].Description.Contains("Hidden"))
+                //    {
+                //        locationLists[WestIndex].Description = "blockedrighttopbottom";
+                //    }
+                //}
+                //else if (WestIndex == -1 || (locationLists[WestIndex].Description == "blockedbottomleft"))
+                //{
+                //    if (WestWestIndex == -1 || !locationLists[WestWestIndex].Description.Contains("blocked") && !locationLists[WestWestIndex].Description.Contains("Hidden"))
+                //    {
+                //        locationLists[WestIndex].Description = "blockedrighttopbottom";
+                //    }
+                //}
+            }
+        }
 
         private void NorthButton()
         {
@@ -372,8 +538,8 @@ namespace GameRPG.ViewModel
             UpdateDirectionalButtons();
             TestingFight();
             TestingActivatingSecondQuest();
-            AddFullMap();
-            //UpdateBlockedMapLocations();
+            UpdateBlockedMapLocations();
+            UpdateMap();
         }
 
         private void EastButton()
@@ -384,7 +550,8 @@ namespace GameRPG.ViewModel
             UpdateDirectionalButtons();
             TestingFight();
             TestingActivatingSecondQuest();
-            AddFullMap();
+            UpdateBlockedMapLocations();
+            UpdateMap();
         }
 
         private void SouthButton()
@@ -395,7 +562,8 @@ namespace GameRPG.ViewModel
             UpdateDirectionalButtons();
             TestingFight();
             TestingActivatingSecondQuest();
-            AddFullMap();
+            UpdateBlockedMapLocations();
+            UpdateMap();
         }
 
         private void WestButton()
@@ -406,7 +574,8 @@ namespace GameRPG.ViewModel
             UpdateDirectionalButtons();
             TestingFight();
             TestingActivatingSecondQuest();
-            AddFullMap();
+            UpdateBlockedMapLocations();
+            UpdateMap();
         }
 
         public void UpdateDirectionalButtons()
@@ -416,7 +585,7 @@ namespace GameRPG.ViewModel
             int mapListIndexSouthMax = locationLists.FindIndex(i => i.CoordinateY == CurrentNorthSouth - 1 && i.CoordinateX == CurrentEastWest);
             int mapListIndexWestMax = locationLists.FindIndex(i => i.CoordinateY == CurrentNorthSouth && i.CoordinateX == CurrentEastWest - 1);
 
-            if (mapListIndexNorthMax == -1)
+            if (mapListIndexNorthMax == -1 || locationLists[mapListIndexNorthMax].Description == "Hidden" || locationLists[mapListIndexNorthMax].Description.Contains("block"))
             {
                 NorthButtonEnabled = false;
             }
@@ -425,7 +594,7 @@ namespace GameRPG.ViewModel
                 NorthButtonEnabled = true;
             }
 
-            if (mapListIndexEastMax == -1)
+            if (mapListIndexEastMax == -1 || locationLists[mapListIndexEastMax].Description == "Hidden" || locationLists[mapListIndexEastMax].Description.Contains("block"))
             {
                 EastButtonEnabled = false;
             }
@@ -434,7 +603,7 @@ namespace GameRPG.ViewModel
                 EastButtonEnabled = true;
             }
 
-            if (mapListIndexSouthMax == -1)
+            if (mapListIndexSouthMax == -1 || locationLists[mapListIndexSouthMax].Description == "Hidden" || locationLists[mapListIndexSouthMax].Description.Contains("block"))
             {
                 SouthButtonEnabled = false;
             }
@@ -443,7 +612,7 @@ namespace GameRPG.ViewModel
                 SouthButtonEnabled = true;
             }
 
-            if (mapListIndexWestMax == -1)
+            if (mapListIndexWestMax == -1 || locationLists[mapListIndexWestMax].Description == "Hidden" || locationLists[mapListIndexWestMax].Description.Contains("block"))
             {
                 WestButtonEnabled = false;
             }
@@ -550,6 +719,7 @@ namespace GameRPG.ViewModel
         {
             if (mapListIndex == locationLists.FindIndex(ml => ml.LocationEvent.Contains("Quest #1")))
             {
+               // Quest[Where(x => x.Title == "1. Search the map")].
                 foreach (var quest in Quest.Where(x => x.Title == "1. Search the map"))
                 {
                     quest.IsComplete = true;
@@ -572,7 +742,34 @@ namespace GameRPG.ViewModel
 
         public void SetupRandomLocations()
         {
+          
             locationLists.Add(new Location(0, 0, "Starting location - Grassland #1", "Grass", "Home", false));
+
+            //All locations
+            //locationLists.Add(new Location(2, -2, "Starting location - Grassland #1", "Grass", "Home", false));
+            //locationLists.Add(new Location(2, -1, "Starting location - Grassland #1", "Grass", "Home", false));
+            //locationLists.Add(new Location(2, 0, "Starting location - Grassland #1", "Grass", "Home", false));
+            //locationLists.Add(new Location(2, 1, "Starting location - Grassland #1", "Grass", "Home", false));
+            //locationLists.Add(new Location(2, 2, "Starting location - Grassland #1", "Grass", "Home", false));
+            //locationLists.Add(new Location(1, -2, "Starting location - Grassland #1", "Grass", "Home", false));
+            //locationLists.Add(new Location(1, -1, "Starting location - Grassland #1", "Grass", "Home", false));
+            //locationLists.Add(new Location(1, 0, "Starting location - Grassland #1", "Grass", "Home", false));
+            //locationLists.Add(new Location(1, 1, "Starting location - Grassland #1", "Grass", "Home", false));
+            //locationLists.Add(new Location(1, 2, "Starting location - Grassland #1", "Grass", "Home", false));
+            //locationLists.Add(new Location(0, -2, "Starting location - Grassland #1", "Grass", "Home", false));
+            //locationLists.Add(new Location(0, -1, "Starting location - Grassland #1", "Grass", "Home", false));
+            //locationLists.Add(new Location(0, 1, "Starting location - Grassland #1", "Grass", "Home", false));
+            //locationLists.Add(new Location(0, 2, "Starting location - Grassland #1", "Grass", "Home", false));
+            //locationLists.Add(new Location(-1, -2, "Starting location - Grassland #1", "Grass", "Home", false));
+            //locationLists.Add(new Location(-1, -1, "Starting location - Grassland #1", "Grass", "Home", false));
+            //locationLists.Add(new Location(-1, 0, "Starting location - Grassland #1", "Grass", "Home", false));
+            //locationLists.Add(new Location(-1, 1, "Starting location - Grassland #1", "Grass", "Home", false));
+            //locationLists.Add(new Location(-1, 2, "Starting location - Grassland #1", "Grass", "Home", false));
+            //locationLists.Add(new Location(-2, -2, "Starting location - Grassland #1", "Grass", "Home", false));
+            //locationLists.Add(new Location(-2, -1, "Starting location - Grassland #1", "Grass", "Home", false));
+            //locationLists.Add(new Location(-2, 0, "Starting location - Grassland #1", "Grass", "Home", false));
+            //locationLists.Add(new Location(-2, 1, "Starting location - Grassland #1", "Grass", "Home", false));
+            //locationLists.Add(new Location(-2, 2, "Starting location - Grassland #1", "Grass", "Home", false));
 
             Random random = new Random();
 
@@ -629,12 +826,30 @@ namespace GameRPG.ViewModel
                 AddRandomLocation(randomCoordinateY, randomCoordinateX, tempY, tempX, randomImage, randomQuest);
             }
             while (locationLists.Count < 10);
+
+            List<int> totalColumns = new List<int> { 2, 1, 0, -1, -2 };
+            List<int> totalRows = new List<int> { 2, 1, 0, -1, -2 };
+            
+            foreach (var item in locationLists.ToList())
+            {
+                foreach (var column in totalColumns)
+                {
+                    foreach (var row in totalRows)
+                    {
+                        if (locationLists.FindIndex(i => i.CoordinateY == column && i.CoordinateX == row) == -1)
+                        {
+                            locationLists.Add(new Location(column, row, "", "Hidden", "", false));
+                        }
+                    }
+                        
+                }
+            }
         }
         public void AddRandomLocation(int randomY, int randomX, int tempY, int tempX, int randomImage, int randomQuest)
         {
             if (locationLists.FindIndex(i => i.CoordinateY == randomY && i.CoordinateX == randomX) != -1)
             {
-                if (locationLists.FindIndex(i => i.CoordinateY == tempY && i.CoordinateX == tempX) == -1 && (tempY <= 4 && tempX <= 4))
+                if (locationLists.FindIndex(i => i.CoordinateY == tempY && i.CoordinateX == tempX) == -1 && (tempY <= 2 && tempY >= -2) && (tempX <= 2 && tempX >= -2))
                 {
                     locationLists.Add(new Location(tempY, tempX, $"Random { locationImages[randomImage] } location #{locationLists.Count + 1}", $"{locationImages[randomImage]}", $"{locationEvents[randomQuest]}", true));
                     locationEvents.RemoveAt(randomQuest);
@@ -972,114 +1187,362 @@ namespace GameRPG.ViewModel
                 RaisePropertyChanged(nameof(this.FullMapImage25));
             }
         }
-        public void AddFullMap()
+
+        public void UpdateMap()
         {
-            if(locationLists[mapListIndex].Hidden == true)
+            if (locationLists[mapListIndex].Hidden == true)
             {
                 locationLists[mapListIndex].Hidden = false;
             }
 
             string currentLocationImages = $"pack://application:,,,/Images/locations/{locationLists[mapListIndex].Description}.png";
+           
+            if (locationLists[locationLists.FindIndex(i => i.CoordinateY == 2 && i.CoordinateX == -2)].Hidden == false)
+            {
+                if (locationLists[locationLists.FindIndex(i => i.CoordinateY == 2 && i.CoordinateX == -2)] == locationLists[mapListIndex])
+                {
+                    FullMapImage1 = $"pack://application:,,,/Images/locations/current{locationLists[locationLists.FindIndex(i => i.CoordinateY == 2 && i.CoordinateX == -2)].Description}.png";
+                }
+                else
+                {
+                    FullMapImage1 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == 2 && i.CoordinateX == -2)].Description}.png";
+                }
 
-            if (locationLists[mapListIndex].CoordinateY == 2 && locationLists[mapListIndex].CoordinateX == -2)
-            {
-                FullMapImage1 = currentLocationImages;
+                //FullMapImage1 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == 2 && i.CoordinateX == -2)].Description}.png";
             }
-            else if (locationLists[mapListIndex].CoordinateY == 2 && locationLists[mapListIndex].CoordinateX == -1)
+            
+            if (locationLists[locationLists.FindIndex(i => i.CoordinateY == 2 && i.CoordinateX == -1)].Hidden == false)
             {
-                FullMapImage2 = currentLocationImages;
+                if (locationLists[locationLists.FindIndex(i => i.CoordinateY == 2 && i.CoordinateX == -1)] == locationLists[mapListIndex])
+                {
+                    FullMapImage2 = $"pack://application:,,,/Images/locations/current{locationLists[locationLists.FindIndex(i => i.CoordinateY == 2 && i.CoordinateX == -1)].Description}.png";
+                }
+                else
+                {
+                    FullMapImage2 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == 2 && i.CoordinateX == -1)].Description}.png";
+                }
+                
+                //FullMapImage2 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == 2 && i.CoordinateX == -1)].Description}.png";
             }
-            else if (locationLists[mapListIndex].CoordinateY == 2 && locationLists[mapListIndex].CoordinateX == 0)
+            
+            if (locationLists[locationLists.FindIndex(i => i.CoordinateY == 2 && i.CoordinateX == 0)].Hidden == false)
             {
-                FullMapImage3 = currentLocationImages;
+                if (locationLists[locationLists.FindIndex(i => i.CoordinateY == 2 && i.CoordinateX == 0)] == locationLists[mapListIndex])
+                {
+                    FullMapImage3 = $"pack://application:,,,/Images/locations/current{locationLists[locationLists.FindIndex(i => i.CoordinateY == 2 && i.CoordinateX == 0)].Description}.png";
+                }
+                else
+                {
+                    FullMapImage3 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == 2 && i.CoordinateX == 0)].Description}.png";
+                }
+
+                //FullMapImage3 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == 2 && i.CoordinateX == 0)].Description}.png";
             }
-            else if (locationLists[mapListIndex].CoordinateY == 2 && locationLists[mapListIndex].CoordinateX == 1)
+            
+            if (locationLists[locationLists.FindIndex(i => i.CoordinateY == 2 && i.CoordinateX == 1)].Hidden == false)
             {
-                FullMapImage4 = currentLocationImages;
+                if (locationLists[locationLists.FindIndex(i => i.CoordinateY == 2 && i.CoordinateX == 1)] == locationLists[mapListIndex])
+                {
+                    FullMapImage4 = $"pack://application:,,,/Images/locations/current{locationLists[locationLists.FindIndex(i => i.CoordinateY == 2 && i.CoordinateX == 1)].Description}.png";
+                }
+                else
+                {
+                    FullMapImage4 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == 2 && i.CoordinateX == 1)].Description}.png";
+                }
+
+                //FullMapImage4 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == 2 && i.CoordinateX == 1)].Description}.png";
             }
-            else if (locationLists[mapListIndex].CoordinateY == 2 && locationLists[mapListIndex].CoordinateX == 2)
+            
+            if (locationLists[locationLists.FindIndex(i => i.CoordinateY == 2 && i.CoordinateX == 2)].Hidden == false)
             {
-                FullMapImage5 = currentLocationImages;
+                if (locationLists[locationLists.FindIndex(i => i.CoordinateY == 2 && i.CoordinateX == 2)] == locationLists[mapListIndex])
+                {
+                    FullMapImage5 = $"pack://application:,,,/Images/locations/current{locationLists[locationLists.FindIndex(i => i.CoordinateY == 2 && i.CoordinateX == 2)].Description}.png";
+                }
+                else
+                {
+                    FullMapImage5 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == 2 && i.CoordinateX == 2)].Description}.png";
+                }
+                
+                //FullMapImage5 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == 2 && i.CoordinateX == 2)].Description}.png";
             }
-            else if (locationLists[mapListIndex].CoordinateY == 1 && locationLists[mapListIndex].CoordinateX == -2)
+            
+            if (locationLists[locationLists.FindIndex(i => i.CoordinateY == 1 && i.CoordinateX == -2)].Hidden == false)
             {
-                FullMapImage6 = currentLocationImages;
+                if (locationLists[locationLists.FindIndex(i => i.CoordinateY == 1 && i.CoordinateX == -2)] == locationLists[mapListIndex])
+                {
+                    FullMapImage6 = $"pack://application:,,,/Images/locations/current{locationLists[locationLists.FindIndex(i => i.CoordinateY == 1 && i.CoordinateX == -2)].Description}.png";
+                }
+                else
+                {
+                    FullMapImage6 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == 1 && i.CoordinateX == -2)].Description}.png";
+                }
+
+                //FullMapImage6 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == 1 && i.CoordinateX == -2)].Description}.png";
             }
-            else if (locationLists[mapListIndex].CoordinateY == 1 && locationLists[mapListIndex].CoordinateX == -1)
+            
+            if (locationLists[locationLists.FindIndex(i => i.CoordinateY == 1 && i.CoordinateX == -1)].Hidden == false)
             {
-                FullMapImage7 = currentLocationImages;
+                if (locationLists[locationLists.FindIndex(i => i.CoordinateY == 1 && i.CoordinateX == -1)] == locationLists[mapListIndex])
+                {
+                    FullMapImage7 = $"pack://application:,,,/Images/locations/current{locationLists[locationLists.FindIndex(i => i.CoordinateY == 1 && i.CoordinateX == -1)].Description}.png";
+                }
+                else
+                {
+                    FullMapImage7 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == 1 && i.CoordinateX == -1)].Description}.png";
+                }
+
+                //FullMapImage7 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == 1 && i.CoordinateX == -1)].Description}.png";
             }
-            else if (locationLists[mapListIndex].CoordinateY == 1 && locationLists[mapListIndex].CoordinateX == 0)
+
+            if (locationLists[locationLists.FindIndex(i => i.CoordinateY == 1 && i.CoordinateX == 0)].Hidden == false)
             {
-                FullMapImage8 = currentLocationImages;
+                if (locationLists[locationLists.FindIndex(i => i.CoordinateY == 1 && i.CoordinateX == 0)] == locationLists[mapListIndex])
+                {
+                    FullMapImage8 = $"pack://application:,,,/Images/locations/current{locationLists[locationLists.FindIndex(i => i.CoordinateY == 1 && i.CoordinateX == 0)].Description}.png";
+                }
+                else
+                {
+                    FullMapImage8 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == 1 && i.CoordinateX == 0)].Description}.png";
+                }
+
+                //FullMapImage8 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == 1 && i.CoordinateX == 0)].Description}.png";
             }
-            else if (locationLists[mapListIndex].CoordinateY == 1 && locationLists[mapListIndex].CoordinateX == 1)
+            
+            if (locationLists[locationLists.FindIndex(i => i.CoordinateY == 1 && i.CoordinateX == 1)].Hidden == false)
             {
-                FullMapImage9 = currentLocationImages;
+                if (locationLists[locationLists.FindIndex(i => i.CoordinateY == 1 && i.CoordinateX == 1)] == locationLists[mapListIndex])
+                {
+                    FullMapImage9 = $"pack://application:,,,/Images/locations/current{locationLists[locationLists.FindIndex(i => i.CoordinateY == 1 && i.CoordinateX == 1)].Description}.png";
+                }
+                else
+                {
+                    FullMapImage9 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == 1 && i.CoordinateX == 1)].Description}.png";
+                }
+
+                //FullMapImage9 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == 1 && i.CoordinateX == 1)].Description}.png";
             }
-            else if (locationLists[mapListIndex].CoordinateY == 1 && locationLists[mapListIndex].CoordinateX == 2)
+            
+            if (locationLists[locationLists.FindIndex(i => i.CoordinateY == 1 && i.CoordinateX == 2)].Hidden == false)
             {
-                FullMapImage10 = currentLocationImages;
+                if (locationLists[locationLists.FindIndex(i => i.CoordinateY == 1 && i.CoordinateX == 2)] == locationLists[mapListIndex])
+                {
+                    FullMapImage10 = $"pack://application:,,,/Images/locations/current{locationLists[locationLists.FindIndex(i => i.CoordinateY == 1 && i.CoordinateX == 2)].Description}.png";
+                }
+                else
+                {
+                    FullMapImage10 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == 1 && i.CoordinateX == 2)].Description}.png";
+                }
+
+                //FullMapImage10 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == 1 && i.CoordinateX == 2)].Description}.png";
             }
-            else if (locationLists[mapListIndex].CoordinateY == 0 && locationLists[mapListIndex].CoordinateX == -2)
+            
+            if (locationLists[locationLists.FindIndex(i => i.CoordinateY == 0 && i.CoordinateX == -2)].Hidden == false)
             {
-                FullMapImage11 = currentLocationImages;
+                if (locationLists[locationLists.FindIndex(i => i.CoordinateY == 0 && i.CoordinateX == -2)] == locationLists[mapListIndex])
+                {
+                    FullMapImage11 = $"pack://application:,,,/Images/locations/current{locationLists[locationLists.FindIndex(i => i.CoordinateY == 0 && i.CoordinateX == -2)].Description}.png";
+                }
+                else
+                {
+                    FullMapImage11 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == 0 && i.CoordinateX == -2)].Description}.png";
+                }
+
+                //FullMapImage11 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == 0 && i.CoordinateX == -2)].Description}.png";
             }
-            else if (locationLists[mapListIndex].CoordinateY == 0 && locationLists[mapListIndex].CoordinateX == -1)
+            
+            if (locationLists[locationLists.FindIndex(i => i.CoordinateY == 0 && i.CoordinateX == -1)].Hidden == false)
             {
-                FullMapImage12 = currentLocationImages;
+                if (locationLists[locationLists.FindIndex(i => i.CoordinateY == 0 && i.CoordinateX == -1)] == locationLists[mapListIndex])
+                {
+                    FullMapImage12 = $"pack://application:,,,/Images/locations/current{locationLists[locationLists.FindIndex(i => i.CoordinateY == 0 && i.CoordinateX == -1)].Description}.png";
+                }
+                else
+                {
+                    FullMapImage12 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == 0 && i.CoordinateX == -1)].Description}.png";
+                }
+
+                //FullMapImage12 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == 0 && i.CoordinateX == -1)].Description}.png";
             }
-            else if (locationLists[mapListIndex].CoordinateY == 0 && locationLists[mapListIndex].CoordinateX == 0)
+            
+            if (locationLists[locationLists.FindIndex(i => i.CoordinateY == 0 && i.CoordinateX == 0)].Hidden == false)
             {
-                FullMapImage13 = currentLocationImages;
+                if (locationLists[locationLists.FindIndex(i => i.CoordinateY == 0 && i.CoordinateX == 0)] == locationLists[mapListIndex])
+                {
+                    FullMapImage13 = $"pack://application:,,,/Images/locations/current{locationLists[locationLists.FindIndex(i => i.CoordinateY == 0 && i.CoordinateX == 0)].Description}.png";
+                }
+                else
+                {
+                    FullMapImage13 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == 0 && i.CoordinateX == 0)].Description}.png";
+                }
             }
-            else if (locationLists[mapListIndex].CoordinateY == 0 && locationLists[mapListIndex].CoordinateX == 1)
+            
+            if (locationLists[locationLists.FindIndex(i => i.CoordinateY == 0 && i.CoordinateX == 1)].Hidden == false)
             {
-                FullMapImage14 = currentLocationImages;
+                if (locationLists[locationLists.FindIndex(i => i.CoordinateY == 0 && i.CoordinateX == 1)] == locationLists[mapListIndex])
+                {
+                    FullMapImage14 = $"pack://application:,,,/Images/locations/current{locationLists[locationLists.FindIndex(i => i.CoordinateY == 0 && i.CoordinateX == 1)].Description}.png";
+                }
+                else
+                {
+                    FullMapImage14 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == 0 && i.CoordinateX == 1)].Description}.png";
+                }
+
+                //FullMapImage14 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == 0 && i.CoordinateX == 1)].Description}.png";
             }
-            else if (locationLists[mapListIndex].CoordinateY == 0 && locationLists[mapListIndex].CoordinateX == 2)
+            
+            if (locationLists[locationLists.FindIndex(i => i.CoordinateY == 0 && i.CoordinateX == 2)].Hidden == false)
             {
-                FullMapImage15 = currentLocationImages;
+                if (locationLists[locationLists.FindIndex(i => i.CoordinateY == 0 && i.CoordinateX == 2)] == locationLists[mapListIndex])
+                {
+                    FullMapImage15 = $"pack://application:,,,/Images/locations/current{locationLists[locationLists.FindIndex(i => i.CoordinateY == 0 && i.CoordinateX == 2)].Description}.png";
+                }
+                else
+                {
+                    FullMapImage15 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == 0 && i.CoordinateX == 2)].Description}.png";
+                }
+
+                //FullMapImage15 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == 0 && i.CoordinateX == 2)].Description}.png";
             }
-            else if (locationLists[mapListIndex].CoordinateY == -1 && locationLists[mapListIndex].CoordinateX == -2)
+            
+            if (locationLists[locationLists.FindIndex(i => i.CoordinateY == -1 && i.CoordinateX == -2)].Hidden == false)
             {
-                FullMapImage16 = currentLocationImages;
+                if (locationLists[locationLists.FindIndex(i => i.CoordinateY == -1 && i.CoordinateX == -2)] == locationLists[mapListIndex])
+                {
+                    FullMapImage16 = $"pack://application:,,,/Images/locations/current{locationLists[locationLists.FindIndex(i => i.CoordinateY == -1 && i.CoordinateX == -2)].Description}.png";
+                }
+                else
+                {
+                    FullMapImage16 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == -1 && i.CoordinateX == -2)].Description}.png";
+                }
+
+                //FullMapImage16 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == -1 && i.CoordinateX == -2)].Description}.png";
             }
-            else if (locationLists[mapListIndex].CoordinateY == -1 && locationLists[mapListIndex].CoordinateX == -1)
+            
+            if (locationLists[locationLists.FindIndex(i => i.CoordinateY == -1 && i.CoordinateX == -1)].Hidden == false)
             {
-                FullMapImage17 = currentLocationImages;
+                if (locationLists[locationLists.FindIndex(i => i.CoordinateY == -1 && i.CoordinateX == -1)] == locationLists[mapListIndex])
+                {
+                    FullMapImage17 = $"pack://application:,,,/Images/locations/current{locationLists[locationLists.FindIndex(i => i.CoordinateY == -1 && i.CoordinateX == -1)].Description}.png";
+                }
+                else
+                {
+                    FullMapImage17 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == -1 && i.CoordinateX == -1)].Description}.png";
+                }
+
+                //FullMapImage17 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == -1 && i.CoordinateX == -1)].Description}.png";
             }
-            else if (locationLists[mapListIndex].CoordinateY == -1 && locationLists[mapListIndex].CoordinateX == 0)
+            
+            if (locationLists[locationLists.FindIndex(i => i.CoordinateY == -1 && i.CoordinateX == 0)].Hidden == false)
             {
-                FullMapImage18 = currentLocationImages;
+                if (locationLists[locationLists.FindIndex(i => i.CoordinateY == -1 && i.CoordinateX == 0)] == locationLists[mapListIndex])
+                {
+                    FullMapImage18 = $"pack://application:,,,/Images/locations/current{locationLists[locationLists.FindIndex(i => i.CoordinateY == -1 && i.CoordinateX == 0)].Description}.png";
+                }
+                else
+                {
+                    FullMapImage18 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == -1 && i.CoordinateX == 0)].Description}.png";
+                }
+
+                //FullMapImage18 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == -1 && i.CoordinateX == 0)].Description}.png";
             }
-            else if (locationLists[mapListIndex].CoordinateY == -1 && locationLists[mapListIndex].CoordinateX == 1)
+            
+            if (locationLists[locationLists.FindIndex(i => i.CoordinateY == -1 && i.CoordinateX == 1)].Hidden == false)
             {
-                FullMapImage19 = currentLocationImages;
+                if (locationLists[locationLists.FindIndex(i => i.CoordinateY == -1 && i.CoordinateX == 1)] == locationLists[mapListIndex])
+                {
+                    FullMapImage19 = $"pack://application:,,,/Images/locations/current{locationLists[locationLists.FindIndex(i => i.CoordinateY == -1 && i.CoordinateX == 1)].Description}.png";
+                }
+                else
+                {
+                    FullMapImage19 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == -1 && i.CoordinateX == 1)].Description}.png";
+                }
+
+                //FullMapImage19 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == -1 && i.CoordinateX == 1)].Description}.png";
             }
-            else if (locationLists[mapListIndex].CoordinateY == -1 && locationLists[mapListIndex].CoordinateX == 2)
+            
+            if (locationLists[locationLists.FindIndex(i => i.CoordinateY == -1 && i.CoordinateX == 2)].Hidden == false)
             {
-                FullMapImage20 = currentLocationImages;
+                if (locationLists[locationLists.FindIndex(i => i.CoordinateY == -1 && i.CoordinateX == 2)] == locationLists[mapListIndex])
+                {
+                    FullMapImage20 = $"pack://application:,,,/Images/locations/current{locationLists[locationLists.FindIndex(i => i.CoordinateY == -1 && i.CoordinateX == 2)].Description}.png";
+                }
+                else
+                {
+                    FullMapImage20 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == -1 && i.CoordinateX == 2)].Description}.png";
+                }
+
+                //FullMapImage20 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == -1 && i.CoordinateX == 2)].Description}.png";
             }
-            else if (locationLists[mapListIndex].CoordinateY == -2 && locationLists[mapListIndex].CoordinateX == -2)
+            
+            if (locationLists[locationLists.FindIndex(i => i.CoordinateY == -2 && i.CoordinateX == -2)].Hidden == false)
             {
-                FullMapImage21 = currentLocationImages;
+                if (locationLists[locationLists.FindIndex(i => i.CoordinateY == -2 && i.CoordinateX == -2)] == locationLists[mapListIndex])
+                {
+                    FullMapImage21 = $"pack://application:,,,/Images/locations/current{locationLists[locationLists.FindIndex(i => i.CoordinateY == -2 && i.CoordinateX == -2)].Description}.png";
+                }
+                else
+                {
+                    FullMapImage21 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == -2 && i.CoordinateX == -2)].Description}.png";
+                }
+
+                //FullMapImage21 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == -2 && i.CoordinateX == -2)].Description}.png";
             }
-            else if (locationLists[mapListIndex].CoordinateY == -2 && locationLists[mapListIndex].CoordinateX == -1)
+            
+            if (locationLists[locationLists.FindIndex(i => i.CoordinateY == -2 && i.CoordinateX == -1)].Hidden == false)
             {
-                FullMapImage22 = currentLocationImages;
+                if (locationLists[locationLists.FindIndex(i => i.CoordinateY == -2 && i.CoordinateX == -1)] == locationLists[mapListIndex])
+                {
+                    FullMapImage22 = $"pack://application:,,,/Images/locations/current{locationLists[locationLists.FindIndex(i => i.CoordinateY == -2 && i.CoordinateX == -1)].Description}.png";
+                }
+                else
+                {
+                    FullMapImage22 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == -2 && i.CoordinateX == -1)].Description}.png";
+                }
+
+                //FullMapImage22 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == -2 && i.CoordinateX == -1)].Description}.png";
             }
-            else if (locationLists[mapListIndex].CoordinateY == -2 && locationLists[mapListIndex].CoordinateX == 0)
+            
+            if (locationLists[locationLists.FindIndex(i => i.CoordinateY == -2 && i.CoordinateX == 0)].Hidden == false)
             {
-                FullMapImage23 = currentLocationImages;
+                if (locationLists[locationLists.FindIndex(i => i.CoordinateY == -2 && i.CoordinateX == 0)] == locationLists[mapListIndex])
+                {
+                    FullMapImage23 = $"pack://application:,,,/Images/locations/current{locationLists[locationLists.FindIndex(i => i.CoordinateY == -2 && i.CoordinateX == 0)].Description}.png";
+                }
+                else
+                {
+                    FullMapImage23 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == -2 && i.CoordinateX == 0)].Description}.png";
+                }
+
+                //FullMapImage23 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == -2 && i.CoordinateX == 0)].Description}.png";
             }
-            else if (locationLists[mapListIndex].CoordinateY == -2 && locationLists[mapListIndex].CoordinateX == 1)
+            
+            if (locationLists[locationLists.FindIndex(i => i.CoordinateY == -2 && i.CoordinateX == 1)].Hidden == false)
             {
-                FullMapImage24 = currentLocationImages;
+                if (locationLists[locationLists.FindIndex(i => i.CoordinateY == -2 && i.CoordinateX == 1)] == locationLists[mapListIndex])
+                {
+                    FullMapImage24 = $"pack://application:,,,/Images/locations/current{locationLists[locationLists.FindIndex(i => i.CoordinateY == -2 && i.CoordinateX == 1)].Description}.png";
+                }
+                else
+                {
+                    FullMapImage24 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == -2 && i.CoordinateX == 1)].Description}.png";
+                }
+
+                //FullMapImage24 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == -2 && i.CoordinateX == 1)].Description}.png";
             }
-            else if (locationLists[mapListIndex].CoordinateY == -2 && locationLists[mapListIndex].CoordinateX == 2)
+            
+            if (locationLists[locationLists.FindIndex(i => i.CoordinateY == -2 && i.CoordinateX == 2)].Hidden == false)
             {
-                FullMapImage25 = currentLocationImages;
+                if (locationLists[locationLists.FindIndex(i => i.CoordinateY == -2 && i.CoordinateX == 2)] == locationLists[mapListIndex])
+                {
+                    FullMapImage25 = $"pack://application:,,,/Images/locations/current{locationLists[locationLists.FindIndex(i => i.CoordinateY == -2 && i.CoordinateX == 2)].Description}.png";
+                }
+                else
+                {
+                    FullMapImage25 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == -2 && i.CoordinateX == 2)].Description}.png";
+                }
+
+                //FullMapImage25 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == -2 && i.CoordinateX == 2)].Description}.png";
             }
         }
     }

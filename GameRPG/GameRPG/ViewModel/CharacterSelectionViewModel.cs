@@ -201,6 +201,8 @@ namespace GameRPG.ViewModel
             TxtWriter characterWriter = new TxtWriter(combineCharacterStats);
 
             characterWriter.WriteCharacters();
+
+            this.main.LoadCharacterFromFile();
         }
     }
 }

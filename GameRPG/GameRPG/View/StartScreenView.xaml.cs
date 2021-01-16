@@ -13,15 +13,5 @@ namespace GameRPG.View
         {
             InitializeComponent();
         }
-
-        private void Settings_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show($"in construction, Sorry!");
-        }
-
-        private void LoadGame_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show($"in construction, Sorry!");
-        }
     }
 }

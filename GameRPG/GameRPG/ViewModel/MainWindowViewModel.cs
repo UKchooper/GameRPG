@@ -18,12 +18,11 @@ namespace GameRPG.ViewModel
         {
             this.startScreenViewModel = new StartScreenViewModel(this);
             this.characterSelectionViewModel = new CharacterSelectionViewModel(this);
-            this.gameViewModel = new GameViewModel();
+            this.gameViewModel = new GameViewModel(this);
             this.characterCreationViewModel = new CharacterCreationViewModel();
             this.fightViewModel = new FightViewModel();
 
             this.CurrentViewModel = this.startScreenViewModel;
-            
         }
         public BindableBase CurrentViewModel
         {
@@ -45,6 +44,11 @@ namespace GameRPG.ViewModel
         public void SwitchToGameView()
         {
             this.CurrentViewModel = this.gameViewModel;
+        }
+
+        public void LoadCharacterFromFile()
+        {
+            this.gameViewModel.AddCharacterFromFile();
         }
     }
 }
