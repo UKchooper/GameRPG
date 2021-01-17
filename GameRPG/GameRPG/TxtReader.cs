@@ -57,12 +57,13 @@ namespace GameRPG
             string description = parts[2];
             int level = int.Parse(parts[3]);
             int hp = int.Parse(parts[4]);
-            int strength = int.Parse(parts[5]);
-            int agility = int.Parse(parts[6]);
-            int intelligence = int.Parse(parts[7]);
-            string image = parts[8];
+            int xp = int.Parse(parts[5]);
+            int strength = int.Parse(parts[6]);
+            int agility = int.Parse(parts[7]);
+            int intelligence = int.Parse(parts[8]);
+            string image = parts[9];
 
-             return new Character(name, type, description, level, hp, strength, agility, intelligence, image);
+             return new Character(name, type, description, level, hp, xp, strength, agility, intelligence, image);
         }
 
         public List<Enemy> ReadEnemies()

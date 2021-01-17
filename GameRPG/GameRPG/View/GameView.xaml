@@ -30,21 +30,21 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition />
+                <ColumnDefinition Width="0.5*"/>
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition />
             </Grid.RowDefinitions>
-
-            <TextBlock Text="Character Info:" Grid.ColumnSpan="2" FontSize="15" HorizontalAlignment="Left" Margin="10,0,0,0"/>
 
             <StackPanel Grid.Row="1" Margin="10,5">
                 <TextBlock Text="Name:" />
                 <TextBlock Text="Type" />
                 <TextBlock Text="Level:" />
-                <TextBlock Text="Experience:" />
-                <TextBlock Text="Health:" />
+                <!--<TextBlock Text="Experience:" />
+                <TextBlock Text="Health:" />-->
                 <TextBlock Text="Strength:" />
                 <TextBlock Text="Agility:" />
                 <TextBlock Text="Intelligence:" />
@@ -54,20 +54,31 @@
                 <TextBlock Text="{Binding Name}" />
                 <TextBlock Text="{Binding Type}" />
                 <TextBlock Text="{Binding Level}" />
-                <TextBlock Text="{Binding XP}" />
-                <TextBlock Text="{Binding HP}" />
+                <!--<TextBlock Text="{Binding XP}" />
+                <TextBlock Text="{Binding HP}" />-->
                 <TextBlock Text="{Binding Strength}" />
                 <TextBlock Text="{Binding Agility}" />
                 <TextBlock Text="{Binding Intelligence}" />
             </StackPanel>
+
+            <StackPanel Grid.Column="2" Grid.Row="1" Margin="10,5">
+                <TextBlock Text="" />
+                <TextBlock Text="" />
+                <TextBlock Text="" />
+                <Button Content="+" Width="20" Height="20" Command="{Binding StrengthStatsButtonCommand}" Visibility="{Binding StatsButtonVisibility}"/>
+                <Button Content="+" Width="20" Height="20" Command="{Binding AgilityStatsButtonCommand}" Visibility="{Binding StatsButtonVisibility}"/>
+                <Button Content="+" Width="20" Height="20" Command="{Binding IntelligenceStatsButtonCommand}" Visibility="{Binding StatsButtonVisibility}"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="2" Grid.ColumnSpan="3" Margin="10,10">
+                <TextBlock Text="Health:" HorizontalAlignment="Center" />
+                <ProgressBar Margin="2" Minimum="0" Maximum="{Binding LimitHP}" Value="{Binding HP}" Foreground="Red" />
+                <TextBlock Text="Experience:" HorizontalAlignment="Center"/>
+                <ProgressBar Margin="2" Minimum="0" Maximum="{Binding LimitXP}" Value="{Binding XP}" Foreground="BlueViolet"/>
+            </StackPanel>
         </Grid>
 
-        <StackPanel Grid.Row="1" Margin="10,10">
-            <TextBlock Text="Health:" HorizontalAlignment="Center" />
-            <ProgressBar Margin="2" Minimum="0" Maximum="100" Value="{Binding HP}" Foreground="Red" />
-            <TextBlock Text="Experience:" HorizontalAlignment="Center"/>
-            <ProgressBar Margin="2" Minimum="0" Maximum="100" Value="{Binding XP}" Foreground="BlueViolet"/>
-        </StackPanel>
+        
 
         <DataGrid Margin="10,10" Grid.Column="0" Grid.Row="2" Background="AliceBlue" BorderThickness="0.5" Width="240" HorizontalAlignment="Left" AutoGenerateColumns="False" ItemsSource="{Binding Quest}" >
             <DataGrid.Resources>
@@ -147,7 +158,7 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
 
-            <StackPanel Grid.Column="0">
+            <StackPanel Grid.Column="0" Margin="10,0,0,0">
                 <TextBlock Text="Area:" />
                 <TextBlock Text="Event:" />
                 <TextBlock Text="Type:" />

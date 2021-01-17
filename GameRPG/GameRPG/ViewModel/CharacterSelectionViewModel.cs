@@ -17,6 +17,7 @@ namespace GameRPG.ViewModel
         private string type;
         private int level;
         private int hp;
+        private int xp;
         private string description;
         private int strength;
         private int agility;
@@ -95,6 +96,19 @@ namespace GameRPG.ViewModel
             {
                 hp = value;
                 RaisePropertyChanged(nameof(HP));
+            }
+        }
+
+        public int XP
+        {
+            get
+            {
+                return xp;
+            }
+            set
+            {
+                xp = value;
+                RaisePropertyChanged(nameof(XP));
             }
         }
 
@@ -185,6 +199,7 @@ namespace GameRPG.ViewModel
             Type = characters[SelectedCharacterIndex].Type;
             Level = characters[SelectedCharacterIndex].Level;
             HP = characters[SelectedCharacterIndex].Hp;
+            XP = characters[SelectedCharacterIndex].Xp;
             Strength = characters[SelectedCharacterIndex].Strength;
             Description = characters[SelectedCharacterIndex].Description;
             Agility = characters[SelectedCharacterIndex].Agility;
@@ -196,7 +211,7 @@ namespace GameRPG.ViewModel
         {
             this.main.SwitchToGameView();
 
-            string combineCharacterStats = $"{Name},{Type},{Description},{Level},{HP},{Strength},{Agility},{Intelligence},{Image}";
+            string combineCharacterStats = $"{Name},{Type},{Description},{Level},{HP},{XP},{Strength},{Agility},{Intelligence},{Image}";
 
             TxtWriter characterWriter = new TxtWriter(combineCharacterStats);
 

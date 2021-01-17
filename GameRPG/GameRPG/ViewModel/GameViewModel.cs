@@ -19,6 +19,11 @@ namespace GameRPG.ViewModel
         private int strength;
         private int intelligence;
         private int agility;
+        private int limitXP = 25;
+        private int limitHP;
+        private int maxStandardHP;
+
+        private string statsButtonVisibility;
 
         private int CurrentNorthSouth = 0;
         private int CurrentEastWest = 0;
@@ -36,7 +41,6 @@ namespace GameRPG.ViewModel
         private List<Character> characters = CharacterSelectionViewModel.characters;
 
         int mapListIndex;
-        int previousMapListIndex;
         int selectedEventIndex;
 
         public List<Location> locationLists = new List<Location>();
@@ -54,6 +58,10 @@ namespace GameRPG.ViewModel
             this.WestButtonCommand = new DelegateCommand(this.WestButton);
             this.EventLocatorCommand = new DelegateCommand(this.EventLocatorButton);
 
+            this.StrengthStatsButtonCommand = new DelegateCommand(this.StrengthStatsButton);
+            this.IntelligenceStatsButtonCommand = new DelegateCommand(this.IntelligenceStatsButton);
+            this.AgilityStatsButtonCommand = new DelegateCommand(this.AgilityStatsButton);
+
             // this adds specific locations
             //AddLocationsFromFile();
 
@@ -63,9 +71,10 @@ namespace GameRPG.ViewModel
             UpdateMapLocation();
             AddQuests();
             AddEvents();
-            //FakePerson();
+            //UpdateCharacterInfomation();
             UpdateBlockedMapLocations();
             UpdateMap();
+            ShowStatsButtons();
         }
 
         public ICommand NorthButtonCommand { get; set; }
@@ -77,6 +86,12 @@ namespace GameRPG.ViewModel
         public ICommand WestButtonCommand { get; set; }
 
         public ICommand EventLocatorCommand { get; set; }
+
+        public ICommand StrengthStatsButtonCommand { get; set; }
+
+        public ICommand IntelligenceStatsButtonCommand { get; set; }
+
+        public ICommand AgilityStatsButtonCommand { get; set; }
 
         public int SelectedCharacterIndex
         {
@@ -192,6 +207,45 @@ namespace GameRPG.ViewModel
             {
                 agility = value;
                 RaisePropertyChanged(nameof(this.Agility));
+            }
+        }
+
+        public int LimitXP
+        {
+            get
+            {
+                return limitXP;
+            }
+            set
+            {
+                limitXP = value;
+                RaisePropertyChanged(nameof(this.LimitXP));
+            }
+        }
+
+        public int LimitHP
+        {
+            get
+            {
+                return limitHP;
+            }
+            set
+            {
+                limitHP = value;
+                RaisePropertyChanged(nameof(this.LimitHP));
+            }
+        }
+
+        public string StatsButtonVisibility
+        {
+            get
+            {
+                return statsButtonVisibility;
+            }
+            set
+            {
+                statsButtonVisibility = value;
+                RaisePropertyChanged(nameof(this.StatsButtonVisibility));
             }
         }
 
@@ -338,14 +392,12 @@ namespace GameRPG.ViewModel
             TxtReader characterReader = new TxtReader(characterFile);
             characterInformation = characterReader.ReadCharacters();
 
-            FakePerson();
+            UpdateCharacterInfomation();
         }
 
         public void UpdateMapLocation()
         {
             mapListIndex = locationLists.FindIndex(i => i.CoordinateY == CurrentNorthSouth && i.CoordinateX == CurrentEastWest);
-
-            //previousMapListIndex;
 
             MapImage = $"pack://application:,,,/Images/locations/{locationLists[mapListIndex].Description.ToLower()}.png";
             MapTitle = locationLists[mapListIndex].Title;
@@ -694,25 +746,32 @@ namespace GameRPG.ViewModel
 
         // Redo FakePerson, TestingFight and TestingActivatingSecondQuest, Enemies, Random locations
 
-        public void FakePerson()
+        public void UpdateCharacterInfomation()
         {
             Name = characterInformation[selectedCharacterIndex].Name;
             Type = characterInformation[selectedCharacterIndex].Type;
             Level = characterInformation[selectedCharacterIndex].Level;
-            XP = 0;
-            HP = characterInformation[selectedCharacterIndex].Hp;
-            Strength = 3;
-            Intelligence = 4;
-            Agility = 5;
+            XP = characterInformation[selectedCharacterIndex].Xp;
+            Strength = characterInformation[selectedCharacterIndex].Strength;
+            Intelligence = characterInformation[selectedCharacterIndex].Intelligence;
+            Agility = characterInformation[selectedCharacterIndex].Agility;
+            maxStandardHP = characterInformation[selectedCharacterIndex].Hp;
+
+            SetCharacterMaxHP();
+
+            // Reset HP
+            HP = LimitHP;
         }
 
         public void TestingFight()
         {
             if (locationLists[mapListIndex].LocationEvent.Contains("Fight"))
             {
-                HP--;
+                HP -= 10;
                 XP += 5;
             }
+
+            ShowStatsButtons();
         }
 
         public void TestingActivatingSecondQuest()
@@ -1544,6 +1603,58 @@ namespace GameRPG.ViewModel
 
                 //FullMapImage25 = $"pack://application:,,,/Images/locations/{locationLists[locationLists.FindIndex(i => i.CoordinateY == -2 && i.CoordinateX == 2)].Description}.png";
             }
+        }
+
+        public void ShowStatsButtons()
+        {
+            if (XP < LimitXP)
+            {
+                StatsButtonVisibility = "Hidden";
+            }
+            else
+            {
+                StatsButtonVisibility = "Visible";
+            }
+        }
+
+        public void ResetXPAndLevelUp()
+        {
+            XP = 0;
+            Level += 1;
+
+            ShowStatsButtons();
+            IncreaseXPLimit();
+        }
+        public void StrengthStatsButton()
+        {
+            Strength += 1;
+
+            ResetXPAndLevelUp();
+        }
+
+        public void IntelligenceStatsButton()
+        {
+            Intelligence += 1;
+
+            ResetXPAndLevelUp();
+            SetCharacterMaxHP();
+        }
+
+        public void AgilityStatsButton()
+        {
+            Agility += 1;
+
+            ResetXPAndLevelUp();
+        }
+
+        public void IncreaseXPLimit()
+        {
+            LimitXP += 10;
+        }
+
+        public void SetCharacterMaxHP()
+        {
+            LimitHP = maxStandardHP + intelligence * 10;
         }
     }
 }
