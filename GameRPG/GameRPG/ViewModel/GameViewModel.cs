@@ -11,6 +11,10 @@ namespace GameRPG.ViewModel
 {
     public class GameViewModel : BindableBase
     {
+        private MainWindowViewModel main;
+
+        Random random = new Random();
+
         private string name;
         private string type;
         private int level;
@@ -24,6 +28,8 @@ namespace GameRPG.ViewModel
         private int maxStandardHP;
 
         private string statsButtonVisibility;
+
+        private string logText;
 
         private int CurrentNorthSouth = 0;
         private int CurrentEastWest = 0;
@@ -47,11 +53,12 @@ namespace GameRPG.ViewModel
         public List<Character> characterInformation = new List<Character> ();
         public List<Quest> questList;
 
-        // Unused atm
-        //List<Enemy> enemyList = new List<Enemy>();
+        List<Enemy> enemyList = new List<Enemy>();
 
         public GameViewModel(MainWindowViewModel main)
         {
+            this.main = main;
+
             this.NorthButtonCommand = new DelegateCommand(this.NorthButton);
             this.EastButtonCommand = new DelegateCommand(this.EastButton);
             this.SouthButtonCommand = new DelegateCommand(this.SouthButton);
@@ -373,6 +380,19 @@ namespace GameRPG.ViewModel
             }
         }
 
+        public string LogText
+        {
+            get
+            {
+                return logText;
+            }
+            set
+            {
+                logText = value;
+                RaisePropertyChanged(nameof(this.LogText));
+            }
+        }
+
         public TrulyObservableCollection<Quest> Quest { get; set; } = new TrulyObservableCollection<Quest>();
 
         public ObservableCollection<string> EventNames { get; } = new ObservableCollection<string>();
@@ -584,11 +604,15 @@ namespace GameRPG.ViewModel
 
         private void NorthButton()
         {
+            int tempNorth = CurrentNorthSouth;
+            int tempWest = CurrentEastWest;
+
             CurrentNorthSouth++;
 
+            CheckDirectionDisplayText(tempNorth, tempWest);
             UpdateMapLocation();
             UpdateDirectionalButtons();
-            TestingFight();
+            FightIntro();
             TestingActivatingSecondQuest();
             UpdateBlockedMapLocations();
             UpdateMap();
@@ -596,11 +620,15 @@ namespace GameRPG.ViewModel
 
         private void EastButton()
         {
+            int tempNorth = CurrentNorthSouth;
+            int tempWest = CurrentEastWest;
+
             CurrentEastWest++;
 
+            CheckDirectionDisplayText(tempNorth, tempWest);
             UpdateMapLocation();
             UpdateDirectionalButtons();
-            TestingFight();
+            FightIntro();
             TestingActivatingSecondQuest();
             UpdateBlockedMapLocations();
             UpdateMap();
@@ -608,11 +636,15 @@ namespace GameRPG.ViewModel
 
         private void SouthButton()
         {
+            int tempNorth = CurrentNorthSouth;
+            int tempWest = CurrentEastWest;
+
             CurrentNorthSouth--;
 
+            CheckDirectionDisplayText(tempNorth, tempWest);
             UpdateMapLocation();
             UpdateDirectionalButtons();
-            TestingFight();
+            FightIntro();
             TestingActivatingSecondQuest();
             UpdateBlockedMapLocations();
             UpdateMap();
@@ -620,14 +652,40 @@ namespace GameRPG.ViewModel
 
         private void WestButton()
         {
+            int tempNorth = CurrentNorthSouth;
+            int tempWest = CurrentEastWest;
+
             CurrentEastWest--;
 
+            CheckDirectionDisplayText(tempNorth, tempWest);
             UpdateMapLocation();
             UpdateDirectionalButtons();
-            TestingFight();
-            TestingActivatingSecondQuest();
             UpdateBlockedMapLocations();
             UpdateMap();
+            FightIntro();
+            TestingActivatingSecondQuest();
+        }
+
+        public void CheckDirectionDisplayText(int tempNorth, int tempWest)
+        {
+            LogText = string.Empty;
+
+            if (CurrentNorthSouth > tempNorth)
+            {
+                LogText = "As I travelled North..";
+            }
+            else if (CurrentNorthSouth < tempNorth)
+            {
+                LogText = "As I travelled South..";
+            }
+            else if (CurrentEastWest > tempWest)
+            {
+                LogText = "As I travelled East..";
+            }
+            else if (CurrentEastWest < tempWest)
+            {
+                LogText = "As I travelled West..";
+            }
         }
 
         public void UpdateDirectionalButtons()
@@ -744,7 +802,7 @@ namespace GameRPG.ViewModel
             }
         }
 
-        // Redo FakePerson, TestingFight and TestingActivatingSecondQuest, Enemies, Random locations
+        // Redo FakePerson, FightIntro and TestingActivatingSecondQuest, Enemies, Random locations
 
         public void UpdateCharacterInfomation()
         {
@@ -763,15 +821,49 @@ namespace GameRPG.ViewModel
             HP = LimitHP;
         }
 
-        public void TestingFight()
+        public void FightIntro()
         {
             if (locationLists[mapListIndex].LocationEvent.Contains("Fight"))
             {
-                HP -= 10;
-                XP += 5;
+                MessageBoxResult result = MessageBox.Show("Do you want to fight?", "Fight!!!!!", MessageBoxButton.YesNo);
+
+                switch (result)
+                {
+                    case MessageBoxResult.Yes:
+                        HP -= 10;
+                        XP += 5;
+                        //LogText = "Victory! You lost 10hp and gained 5xp";
+
+                        Battle();
+
+                        break;
+                    case MessageBoxResult.No:
+                        HP -= 5;
+                        LogText = "You got caught trying to escape.. you lose 5hp";
+                        break;
+                }
+            }
+
+            if(HP <= 0)
+            {
+                MessageBox.Show("You lose, sorry! The game will now close");
+                Application.Current.Shutdown();
             }
 
             ShowStatsButtons();
+        }
+
+        public void Battle()
+        {
+            AddEnemies();
+
+            int enemyNum = random.Next(0, enemyList.Count);
+
+            LogText = $"{enemyList[enemyNum].Name} has appeared!";
+
+            int playerRoll = random.Next(0, 100);
+            int enemyRoll = random.Next(0, 100);
+
         }
 
         public void TestingActivatingSecondQuest()
@@ -792,7 +884,10 @@ namespace GameRPG.ViewModel
 
         public void AddEnemies()
         {
-            // enemyList.Add(new Enemy())
+            enemyList.Add(new Enemy("Viking", "Warrior", "Bestest Warrior ever", 1, 20, 5, 3, 2));
+            enemyList.Add(new Enemy("Zombie", "Walker", "Bestest Walker ever", 1, 5, 2, 3, 1));
+            enemyList.Add(new Enemy("Death Knight", "Knight", "Bestest Death Knight ever", 1, 40, 8, 3, 5));
+            enemyList.Add(new Enemy("Turkey", "Runner", "Bestest Turkey ever", 1, 10, 3, 9, 2));
         }
 
         List<string> locationImages = new List<string> { "Grass", "Ocean", "Sand" };
@@ -829,8 +924,6 @@ namespace GameRPG.ViewModel
             //locationLists.Add(new Location(-2, 0, "Starting location - Grassland #1", "Grass", "Home", false));
             //locationLists.Add(new Location(-2, 1, "Starting location - Grassland #1", "Grass", "Home", false));
             //locationLists.Add(new Location(-2, 2, "Starting location - Grassland #1", "Grass", "Home", false));
-
-            Random random = new Random();
 
             List<int> coordYList = new List<int>();
             List<int> coordXList = new List<int>();
